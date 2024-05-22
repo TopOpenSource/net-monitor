@@ -165,6 +165,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>ruoyi-poor-user</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -182,8 +188,18 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>ruoyi-poor-user</module>
     </modules>
     <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
