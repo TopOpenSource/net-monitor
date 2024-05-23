@@ -59,7 +59,7 @@
       <el-table-column label="姓名" width="80" align="center" prop="name">
 
       </el-table-column>
-      <el-table-column label="手机号" width="200" align="center" prop="phone"/>
+      <el-table-column label="手机号" width="150" align="center" prop="phone"/>
       <el-table-column label="身份证号" width="200" align="center" prop="cardId"/>
       <el-table-column label="出生日期" width="100" align="center" prop="birthday">
         <template slot-scope="scope">
@@ -76,7 +76,7 @@
           <dict-tag :options="dict.type.yes_no" :value="scope.row.disability"/>
         </template>
       </el-table-column>
-      <el-table-column label="残疾证号" width="200" align="center" prop="disabilityId"/>
+<!--      <el-table-column label="残疾证号" width="200" align="center" prop="disabilityId"/>-->
       <el-table-column label="是否死亡" width="80" align="center" prop="live">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.yes_no" :value="scope.row.live"/>

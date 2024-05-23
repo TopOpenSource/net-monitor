@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20">
-      <el-col :span="5" :xs="24">
+      <el-col :span="6" :xs="24">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>户籍信息</span>
@@ -11,88 +11,83 @@
               <li class="list-group-item">
                 <svg-icon icon-class="user"/>
                 姓名
-                <div class="pull-right">李宝库</div>
+                <div class="pull-right">{{ userInfo.name }}</div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="user"/>
                 性别
-                <div class="pull-right">男</div>
+                <div class="pull-right">
+                  <dict-tag :options="dict.type.sys_user_sex" :value="userInfo.sex"/>
+                </div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="phone"/>
                 身份证号
-                <div class="pull-right">3714261988888888</div>
+                <div class="pull-right">{{ userInfo.cardId }}</div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="tree"/>
                 是否残疾
-                <div class="pull-right">是</div>
+                <div class="pull-right">
+                  <dict-tag :options="dict.type.yes_no" :value="userInfo.disability"/>
+                </div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="phone"/>
                 残疾证号
-                <div class="pull-right">3714261988888888</div>
+                <div class="pull-right">{{ userInfo.disabilityId }}</div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="phone"/>
                 手机号码
-                <div class="pull-right">1560000000</div>
+                <div class="pull-right">{{ userInfo.phone }}</div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="tree"/>
                 村落
-                <div class="pull-right">象牙山</div>
+                <div class="pull-right">
+                  <dict-tag :options="dict.type.village" :value="userInfo.village"/>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <svg-icon icon-class="tree"/>
+                是否死亡
+                <div class="pull-right">
+                  <dict-tag :options="dict.type.yes_no" :value="userInfo.live"/>
+                </div>
               </li>
               <li class="list-group-item">
                 <svg-icon icon-class="date"/>
                 创建日期
-                <div class="pull-right">2022-12-28</div>
+                <div class="pull-right">{{ parseTime(userInfo.createTime, '{y}-{m}-{d}') }}</div>
               </li>
             </ul>
           </div>
         </el-card>
       </el-col>
-      <el-col :span="19" :xs="24">
+      <el-col :span="18" :xs="24">
         <el-card>
           <div slot="header" class="clearfix">
             <span>补助发放统计-2024年</span>
-            <el-date-picker style="float: right" type="year" v-model="year1" placeholder="选择年分"></el-date-picker>
+            <el-date-picker style="float: right" type="year" v-model=" currentYear" placeholder="选择年分"></el-date-picker>
           </div>
 
           <el-row>
-            <el-col :span="8">
-              <div ref="butie" style="height: 250px" />
+            <el-col :span="12">
+              <div ref="subsidyType" style="height: 250px" />
             </el-col>
 
-            <el-col :span="16">
-              <div ref="yeartj" style="height: 250px" />
+            <el-col :span="12">
+              <div ref="subsidyYear" style="height: 250px" />
             </el-col>
 
           </el-row>
           <el-tabs v-model="activeTab">
-            <el-tab-pane label="残疾补贴" name="canji">
-              <el-table :data="tableData" style="width: 100%">
-                <el-table-column prop="month" label="月份" width="180"></el-table-column>
-                <el-table-column prop="money" label="金额（元）" width="180"></el-table-column>
-                <el-table-column prop="remark" label="备注"></el-table-column>
-              </el-table>
-            </el-tab-pane>
-
-            <el-tab-pane label="低保补贴" name="poor">
-              <el-table :data="tableData" style="width: 100%">
-                <el-table-column prop="month" label="月份" width="180"></el-table-column>
-                <el-table-column prop="money" label="金额（元）" width="180"></el-table-column>
-                <el-table-column prop="remark" label="备注"></el-table-column>
-              </el-table>
-            </el-tab-pane>
-
-            <el-tab-pane label="老年补贴" name="olde">
-              <el-table :data="tableData" style="width: 100%">
-                <el-table-column prop="month" label="月份" width="180"></el-table-column>
-                <el-table-column prop="money" label="金额（元）" width="180"></el-table-column>
-                <el-table-column prop="remark" label="备注"></el-table-column>
-              </el-table>
-            </el-tab-pane>
+            <template v-for="item in dict.type.subsidy_type">
+              <el-tab-pane :label="item.label" :name="item.value">
+                 <subsidy-table :card-id="userInfo.cardId" :subsidy-type="item.value" :year=" currentYear"></subsidy-table>
+              </el-tab-pane>
+            </template>
           </el-tabs>
 
         </el-card>
@@ -102,22 +97,25 @@
 </template>
 
 <script>
+import subsidyTable from "./subsidyTable.vue";
 import * as echarts from "echarts";
-
+import {getInfo} from "@/api/poor/user";
+import {selGroupType, selGroupYearType} from "../../../api/poor/subsidy";
 export default {
   name: "Profile",
-  components: {},
+  dicts: ['yes_no', 'sys_user_sex', 'village','subsidy_type'],
+  components: {subsidyTable},
   data() {
     return {
       userId:undefined,
       userInfo:{
 
       },
-      year1: '',
-      activeTab:'canji',
+      currentYear: (new Date()).getFullYear(),
+      activeTab:'0',
       tableData:[],
-      butie:null,
-      yeartj:null
+      subsidyType:null,
+      subsidyYear:null
     };
   },
   created() {
@@ -125,126 +123,144 @@ export default {
     this.initData()
   },
   mounted(){
-    this.statistics()
-    this.statistics2()
+
   },
   methods: {
     initData(){
-      this.tableData=[
-        {month:'2024-01',money:120,remark:'补贴xxx'},
-        {month:'2024-02',money:120,remark:'补贴xxx'},
-        {month:'2024-03',money:120,remark:'补贴xxx'},
-        {month:'2024-04',money:120,remark:'补贴xxx'},
-        {month:'2024-05',money:120,remark:'补贴xxx'},
-      ]
+      //获取用户信息
+      getInfo(this.userId).then(res=>{
+        this.userInfo=res
+        this.statistics()
+        this.statistics2()
+      })
+    },
+    //补充subsidy 中文名称
+    formartSubsidy(subsidyList){
+      subsidyList.forEach(subsidy=>{
+        subsidy.value=subsidy.money
+
+        //补充subsidy 中文名称
+        this.dict.type.subsidy_type.forEach(dict=>{
+          if(dict.value==subsidy.subsidyType){
+            subsidy.name=dict.label
+          }
+        })
+      })
     },
     statistics(){
-      this.butie = echarts.init(this.$refs.butie);
-      this.butie.setOption({
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          top: '5%',
-          left: 'center'
-        },
-        series: [
-          {
-            name: 'Access From',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
+      selGroupType({cardId:this.userInfo.cardId,year:this.currentYear}).then(res=>{
+        this.formartSubsidy(res)
+
+        this.subsidyType = echarts.init(this.$refs.subsidyType);
+        this.subsidyType.setOption({
+          tooltip: {
+            trigger: 'item'
+          },
+          legend: {
+            top: '5%',
+            left: 'center'
+          },
+          series: [
+            {
+              name: 'Access From',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              avoidLabelOverlap: false,
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 2
+              },
               label: {
-                show: true,
-                fontSize: 40,
-                fontWeight: 'bold'
-              }
-            },
-            labelLine: {
-              show: false
-            },
-            data: [
-              { value: 2000, name: '老年补贴' },
-              { value: 3000, name: '伤残补贴' },
-              { value: 500, name: '低保补贴' },
-            ]
-          }
-        ]
-      });
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: 40,
+                  fontWeight: 'bold'
+                }
+              },
+              labelLine: {
+                show: false
+              },
+              data: res
+            }
+          ]
+        });
+      })
+
     },
     statistics2(){
-      this.yeartj = echarts.init(this.$refs.yeartj);
-      this.yeartj.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
-          }
-        },
-        legend: {},
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value'
-        },
-        yAxis: {
-          type: 'category',
-          data: ['2021', '2022', '2023', '2024']
-        },
-        series: [
-          {
-            name: '老年补贴',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [100, 100, 120, 119]
-          },
-          {
-            name: '伤残补贴',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [100, 150, 0, 150]
-          },
-          {
-            name: '低保补贴',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: [1000, 800, 1000, 1000]
-          },
+      selGroupYearType({cardId:this.userInfo.cardId}).then(res=>{
 
-        ]
-      });
+        console.log(res)
+
+        this.subsidyYear = echarts.init(this.$refs.subsidyYear);
+        this.subsidyYear.setOption({
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+            }
+          },
+          legend: {},
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value'
+          },
+          yAxis: {
+            type: 'category',
+            data: ['2021', '2022', '2023', '2024']
+          },
+          series: [
+            {
+              name: '老年补贴',
+              type: 'bar',
+              stack: 'total',
+              label: {
+                show: true
+              },
+              emphasis: {
+                focus: 'series'
+              },
+              data: [100, 100, 120, 119]
+            },
+            {
+              name: '伤残补贴',
+              type: 'bar',
+              stack: 'total',
+              label: {
+                show: true
+              },
+              emphasis: {
+                focus: 'series'
+              },
+              data: [100, 150, 0, 150]
+            },
+            {
+              name: '低保补贴',
+              type: 'bar',
+              stack: 'total',
+              label: {
+                show: true
+              },
+              emphasis: {
+                focus: 'series'
+              },
+              data: [1000, 800, 1000, 1000]
+            },
+
+          ]
+        });
+      })
+
     }
 
   }

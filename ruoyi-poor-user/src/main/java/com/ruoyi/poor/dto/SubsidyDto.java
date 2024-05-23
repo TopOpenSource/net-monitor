@@ -1,4 +1,4 @@
-package com.ruoyi.poor.domain;
+package com.ruoyi.poor.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -13,44 +13,25 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("poor_subsidy")
-public class Subsidy extends BaseEntity {
-
-    @JsonSerialize(using = ToStringSerializer.class)
-    @TableId
-    private Long id;
-
-
-    @JsonSerialize(using = ToStringSerializer.class)
-    @TableField("data_file_id")
-    private Long dataFileId;
-
-
-    @ExcelProperty(value  = "身份证号")
-    @TableField("card_id")
+public class SubsidyDto {
     private String cardId;
-
-    /**
-     * 金额
-     */
-    @ExcelProperty(value  = "金额")
-    @TableField("money")
-    private BigDecimal money;
-
-    /**
-     * 月份
-     */
-    @TableField("subsidy_date")
-    private Date subsidyDate;
-
-    /**
-     * 补贴类型
-     */
-    @TableField("subsidy_type")
     private String subsidyType;
+    private String subsidyTypeCN;
+    private Integer year;
+    private BigDecimal money;
+    /**
+     * 根据类型分组
+     */
+    private List<SubsidyDto> yearDataList;
 
+    private List<BigDecimal> moneyDataList;
+    private List<Long> yearDataIdList;
+
+    private Integer minYear;
+    private Integer maxYear;
 }
