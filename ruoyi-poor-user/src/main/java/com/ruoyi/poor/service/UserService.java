@@ -5,4 +5,5 @@ import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.domain.User;
 
 public interface UserService extends IService<User> {
+    void saveOrUpdateUser(User domain);
 }

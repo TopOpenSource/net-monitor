@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="身份证号" prop="postCode">
+      <el-form-item label="身份证号" prop="cardId">
         <el-input
           v-model="queryParams.cardId"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="姓名" prop="postName">
+      <el-form-item label="姓名" prop="name">
         <el-input
           v-model="queryParams.name"
           clearable
@@ -16,8 +16,8 @@
         />
       </el-form-item>
 
-      <el-form-item label="是否残疾" prop="postName">
-        <el-select v-model="queryParams.status"  clearable>
+      <el-form-item label="是否残疾" prop="disability">
+        <el-select v-model="queryParams.disability" clearable>
           <el-option
             v-for="dict in dict.type.yes_no"
             :key="dict.value"
@@ -27,8 +27,8 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="是否死亡" prop="postName">
-        <el-select v-model="queryParams.status"  clearable>
+      <el-form-item label="是否死亡" prop="live">
+        <el-select v-model="queryParams.live" clearable>
           <el-option
             v-for="dict in dict.type.yes_no"
             :key="dict.value"
@@ -46,65 +46,46 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-        >修改</el-button>
+        <el-button type="warning" plain icon="el-icon-upload2" size="mini" @click="handleDelete">导入</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
-      </el-col>
+
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="身份证号" width="200" align="center" prop="cardId" />
-      <el-table-column label="出生日期" align="center" prop="birthday" />
-      <el-table-column label="村落" align="center" prop="village" />
-      <el-table-column label="是否残疾" align="center" prop="disability" >
+    <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
+      <el-table-column label="姓名" width="80" align="center" prop="name">
+
+      </el-table-column>
+      <el-table-column label="手机号" width="200" align="center" prop="phone"/>
+      <el-table-column label="身份证号" width="200" align="center" prop="cardId"/>
+      <el-table-column label="出生日期" width="100" align="center" prop="birthday">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.birthday, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="村落" width="150" align="center" prop="village">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.village" :value="scope.row.village"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否残疾" width="80" align="center" prop="disability">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.yes_no" :value="scope.row.disability"/>
         </template>
       </el-table-column>
-      <el-table-column label="残疾证号" width="200"  align="center" prop="disabilityNo" />
-      <el-table-column label="是否死亡" align="center" prop="live" >
+      <el-table-column label="残疾证号" width="200" align="center" prop="disabilityId"/>
+      <el-table-column label="是否死亡" width="80" align="center" prop="live">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.yes_no" :value="scope.row.live"/>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="100">
-
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -124,17 +105,101 @@
     />
 
 
+    <el-dialog :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="form.name"/>
+        </el-form-item>
+
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="form.sex" placeholder="请选择" clearable>
+            <el-option
+              v-for="item in dict.type.sys_user_sex"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="出生年月" prop="birthday">
+          <el-date-picker
+            v-model="form.birthday"
+            type="date"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="身份证号" prop="cardId">
+          <el-input v-model="form.cardId"/>
+        </el-form-item>
+
+        <el-form-item label="村落" prop="village">
+          <el-select v-model="form.village" placeholder="请选择" clearable>
+            <el-option
+              v-for="item in dict.type.village"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="是否残疾" prop="disability">
+          <el-select v-model="form.disability" placeholder="请选择" clearable>
+            <el-option
+              v-for="item in dict.type.yes_no"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="残疾证号" prop="disabilityId" v-if="form.disability=='1'">
+          <el-input v-model="form.disabilityId"/>
+        </el-form-item>
+
+        <el-form-item label="是否死亡" prop="live">
+          <el-select v-model="form.live" placeholder="请选择" clearable>
+            <el-option
+              v-for="item in dict.type.yes_no"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="form.phone"/>
+        </el-form-item>
+
+        <el-form-item label="详细地址" prop="address">
+          <el-input v-model="form.address"/>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 
-
+import {list, saveOrUpdate, del, getInfo} from "@/api/poor/user";
 import {parseTime} from "@/utils/ruoyi";
+import ExcelFileUpload from "@/views/poor/import/ExcelFileUpload.vue";
 
 export default {
   name: "PoorUser",
-  dicts: ['yes_no'],
+  components: {ExcelFileUpload},
+  dicts: ['yes_no', 'sys_user_sex', 'village'],
   data() {
     return {
       // 遮罩层
@@ -150,7 +215,7 @@ export default {
       // 总条数
       total: 0,
       // 岗位表格数据
-      postList: [],
+      userList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -166,14 +231,29 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        postName: [
-          { required: true, message: "岗位名称不能为空", trigger: "blur" }
+        name: [
+          {required: true, message: "不能为空", trigger: "blur"}
         ],
-        postCode: [
-          { required: true, message: "岗位编码不能为空", trigger: "blur" }
+        sex: [
+          {required: true, message: "不能为空", trigger: "blur"}
         ],
-        postSort: [
-          { required: true, message: "岗位顺序不能为空", trigger: "blur" }
+        birthday: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        cardId: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        disability: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        disabilityId: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        live: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        village: [
+          {required: true, message: "不能为空", trigger: "blur"}
         ]
       }
     };
@@ -185,16 +265,11 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
-      this.postList = [
-        {name:'张金浩',cardId:'372422195312191220',birthday:'1942-03-10',village:'北街村',disability:'1',disabilityNo:'372422195312191220',live:'0',createTime:'2024-12-24'},
-        {name:'张金浩',cardId:'372422195312191220',birthday:'1942-03-10',village:'北街村',disability:'1',disabilityNo:'372422195312191220',live:'0',createTime:'2024-12-24'},
-        {name:'张金浩',cardId:'372422195312191220',birthday:'1942-03-10',village:'南街村',disability:'0',disabilityNo:'',live:'0',createTime:'2024-12-24'},
-        {name:'张金浩',cardId:'372422195312191220',birthday:'1942-03-10',village:'北街村',disability:'0',disabilityNo:'',live:'0',createTime:'2024-12-24'},
-        {name:'张金浩',cardId:'372422195312191220',birthday:'1942-03-10',village:'南街村',disability:'1',disabilityNo:'372422195312191220',live:'0',createTime:'2024-12-24'},
-        {name:'张金浩',cardId:'372422195312191220',birthday:'1942-03-10',village:'北街村',disability:'0',disabilityNo:'',live:'1',createTime:'2024-12-24'}
-        ];
-       this.total = 8;
-      this.loading = false;
+      list(this.queryParams).then(response => {
+        this.userList = response.rows
+        this.total = response.total
+        this.loading = false;
+      })
     },
     // 取消按钮
     cancel() {
@@ -204,12 +279,17 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        postId: undefined,
-        postCode: undefined,
-        postName: undefined,
-        postSort: 0,
-        status: "0",
-        remark: undefined
+        id: null,
+        familyId: null,
+        cardId: null,
+        name: null,
+        sex: null,
+        birthday: null,
+        disability: null,
+        disabilityId: null,
+        live: null,
+        phone: null,
+        address: null
       };
       this.resetForm("form");
     },
@@ -226,7 +306,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.postId)
-      this.single = selection.length!=1
+      this.single = selection.length != 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -235,7 +315,7 @@ export default {
       this.open = true;
       this.title = "添加岗位";
     },
-    handleView(row){
+    handleView(row) {
       this.$router.push({
         //核心语句
         path: "/poor/user",
@@ -244,42 +324,33 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const postId = row.postId || this.ids
-      getPost(postId).then(response => {
-        this.form = response.data;
+      getInfo(row.id).then(response => {
+        this.form = response;
         this.open = true;
-        this.title = "修改岗位";
+        this.title = "修改贫困人员";
       });
     },
     /** 提交按钮 */
-    submitForm: function() {
+    submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.postId != undefined) {
-            updatePost(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addPost(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+          saveOrUpdate(this.form).then(response => {
+            this.$modal.msgSuccess("修改成功");
+            this.open = false;
+            this.getList();
+          })
         }
       });
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const postIds = row.postId || this.ids;
-      this.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？').then(function() {
-        return delPost(postIds);
+      this.$modal.confirm('是否确认删除？').then(function () {
+        return del(row.id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
     /** 导出按钮操作 */
     handleExport() {

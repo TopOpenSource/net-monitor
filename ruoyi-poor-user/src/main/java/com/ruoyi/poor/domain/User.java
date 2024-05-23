@@ -52,9 +52,28 @@ public class User extends BaseEntity {
     private String disability;
 
     /**
+     * 残疾证号
+     */
+    @ExcelProperty(value = "残疾证号")
+    @TableField("disability_id")
+    private String disabilityId;
+
+    /**
      * 是否在世
      */
     @ExcelProperty(value = "是否在世", converter = YesOrNoConverter.class)
     @TableField("live")
     private String live;
+
+    @ExcelProperty(value = "手机号")
+    @TableField("phone")
+    private String phone;
+
+    @ExcelProperty(value = "详细地址")
+    @TableField("address")
+    private String address;
+
+    @ExcelProperty(value = "村落")
+    @TableField("village")
+    private String village;
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.poor.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.domain.User;
@@ -11,5 +12,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Override
+    public void saveOrUpdateUser(User entity) {
+        if (entity.getId() == null) {
+            entity.setId(IdUtil.getSnowflakeNextId());
+        }
+        this.saveOrUpdate(entity);
+    }
+
 
 }
