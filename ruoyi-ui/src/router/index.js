@@ -95,7 +95,7 @@ export const constantRoutes = [
     redirect: 'noredirect',
     children: [
       {
-        path: 'user',
+        path: 'user/:userId(\\d+)',
         component: () => import('@/views/poor/user/info'),
         name: 'PoorUser',
         meta: { title: '人员信息', icon: 'user' }

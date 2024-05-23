@@ -7,9 +7,6 @@
             <span>户籍信息</span>
           </div>
           <div>
-            <div class="text-center">
-              <userAvatar/>
-            </div>
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
                 <svg-icon icon-class="user"/>
@@ -105,14 +102,17 @@
 </template>
 
 <script>
-import userAvatar from "./userAvatar";
 import * as echarts from "echarts";
 
 export default {
   name: "Profile",
-  components: {userAvatar},
+  components: {},
   data() {
     return {
+      userId:undefined,
+      userInfo:{
+
+      },
       year1: '',
       activeTab:'canji',
       tableData:[],
@@ -121,6 +121,7 @@ export default {
     };
   },
   created() {
+    this.userId=this.$route.params.userId
     this.initData()
   },
   mounted(){

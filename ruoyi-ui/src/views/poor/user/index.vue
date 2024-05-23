@@ -335,8 +335,7 @@ export default {
     },
     handleView(row) {
       this.$router.push({
-        //核心语句
-        path: "/poor/user",
+        path: "/poor/user/"+row.id,
       });
     },
     /** 修改按钮操作 */
