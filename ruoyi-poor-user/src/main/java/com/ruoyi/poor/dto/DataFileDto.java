@@ -14,10 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 public class DataFileDto {
     private String filePath;
+    private String fileName;
     private List<String> sheetNames;
 
-    public DataFileDto(String filePath, List<String> sheetNames) {
+    public DataFileDto(String filePath,String fileName, List<String> sheetNames) {
         this.filePath = filePath;
+        this.fileName = fileName;
         this.sheetNames = sheetNames;
     }
 

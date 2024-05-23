@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.poor.domain.excelcovert.SexConverter;
 import com.ruoyi.poor.domain.excelcovert.YesOrNoConverter;
@@ -14,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -43,7 +42,7 @@ public class User extends BaseEntity {
 
     @ExcelProperty(value = "出生日期")
     @TableField("birthday")
-    private LocalDate birthday;
+    private Date birthday;
 
     /**
      * 是否残疾

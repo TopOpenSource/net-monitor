@@ -56,7 +56,7 @@ public class DataFileController extends BaseController {
             return sheet.getSheetName();
         }).collect(Collectors.toList());
 
-        return AjaxResult.success(new DataFileDto(filePath, sheetNames));
+        return AjaxResult.success(new DataFileDto(filePath,file.getOriginalFilename(),sheetNames));
     }
 
     /**
@@ -67,7 +67,7 @@ public class DataFileController extends BaseController {
      * @throws IOException
      */
     @PostMapping("saveAndImport")
-    public AjaxResult saveAndImport(DataFile dataFile) {
+    public AjaxResult saveAndImport(@RequestBody  DataFile dataFile) {
         dataFileService.saveAndImport(dataFile);
         return AjaxResult.success(0);
     }
@@ -81,8 +81,23 @@ public class DataFileController extends BaseController {
      */
     @PostMapping("download/{id}")
     public void download(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+        DataFile dataFile = dataFileService.getById(id);
+        String path = dataFile.getFilePath().replaceFirst("/profile/upload", "");
+
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        FileUtils.setAttachmentResponseHeader(response, "FFFF.docx");
-        FileUtils.writeBytes("dd", response.getOutputStream());
+        FileUtils.setAttachmentResponseHeader(response, dataFile.getFileName());
+        FileUtils.writeBytes(RuoYiConfig.getUploadPath() + path, response.getOutputStream());
     }
+
+    /**
+     * 文件删除
+     * @param id
+     * @return
+     */
+    @DeleteMapping("delFileAndRecord/{id}")
+    public AjaxResult delFileAndRecord(@PathVariable("id") Long id) {
+        dataFileService.delFileAndRecord(id);
+        return AjaxResult.success(0);
+    }
+
 }

@@ -1,19 +1,18 @@
 package com.ruoyi.poor.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.ruoyi.common.annotation.Excel;
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -45,8 +44,8 @@ public class Subsidy extends BaseEntity {
     /**
      * 月份
      */
-    @TableField("year_month")
-    private LocalDate yearMonth;
+    @TableField("subsidy_date")
+    private Date subsidyDate;
 
     /**
      * 补贴类型

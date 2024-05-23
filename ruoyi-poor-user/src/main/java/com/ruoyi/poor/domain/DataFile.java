@@ -3,15 +3,15 @@ package com.ruoyi.poor.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.poi.ss.usermodel.Sheet;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -37,8 +37,8 @@ public class DataFile extends BaseEntity {
     /**
      * 数据量
      */
-    @TableField("count_")
-    private Integer count_;
+    @TableField("data_count")
+    private Integer dataCount;
 
     /**
      * sheet
@@ -53,6 +53,7 @@ public class DataFile extends BaseEntity {
     private Integer dataIndex;
 
 
-    @TableField("year_month")
-    private LocalDate yearMonth;
+    @TableField("subsidy_date")
+    @JsonFormat(pattern = "yyyy-MM")
+    private Date subsidyDate;
 }

@@ -44,9 +44,11 @@ public class BaseEntity implements Serializable
     private Date updateTime;
 
     /** 备注 */
+    @TableField(exist = false)
     private String remark;
 
     /** 请求参数 */
+    @TableField(exist = false)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, Object> params;
 
