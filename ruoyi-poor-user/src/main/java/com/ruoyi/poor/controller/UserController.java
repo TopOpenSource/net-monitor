@@ -77,7 +77,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("importFile")
     public AjaxResult importFile(MultipartFile file) throws IOException {
-        return AjaxResult.success();
+        return AjaxResult.success(userService.importData(file));
     }
 
 

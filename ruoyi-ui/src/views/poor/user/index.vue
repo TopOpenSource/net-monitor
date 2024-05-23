@@ -49,7 +49,7 @@
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-upload2" size="mini" @click="handleDelete">导入</el-button>
+        <el-button type="warning" plain icon="el-icon-upload2" size="mini" @click="handleImport">导入</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -187,6 +187,10 @@
       </div>
     </el-dialog>
 
+
+    <el-dialog :title="importDialog.title" :visible.sync="importDialog.open" width="500px" :close-on-click-modal="false" append-to-body>
+     <ExcelFileUpload @success="importSuccess"></ExcelFileUpload>
+    </el-dialog>
   </div>
 </template>
 
@@ -194,7 +198,7 @@
 
 import {list, saveOrUpdate, del, getInfo} from "@/api/poor/user";
 import {parseTime} from "@/utils/ruoyi";
-import ExcelFileUpload from "@/views/poor/import/ExcelFileUpload.vue";
+import ExcelFileUpload from "@/views/poor/user/ExcelFileUpload.vue";
 
 export default {
   name: "PoorUser",
@@ -226,6 +230,10 @@ export default {
         pageSize: 10,
         cardId: undefined,
         name: undefined,
+      },
+      importDialog:{
+        title:'导入人员',
+        open:false
       },
       // 表单参数
       form: {},
@@ -308,6 +316,16 @@ export default {
       this.ids = selection.map(item => item.postId)
       this.single = selection.length != 1
       this.multiple = !selection.length
+    },
+    /**导入**/
+    handleImport(){
+      this.importDialog.open=true;
+    },
+    /**导入成功刷新**/
+    importSuccess(count){
+      this.importDialog.open=false
+      this.$modal.msgSuccess("成功导入:"+count+"条！");
+      this.getList()
     },
     /** 新增按钮操作 */
     handleAdd() {
