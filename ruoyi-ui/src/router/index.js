@@ -99,6 +99,12 @@ export const constantRoutes = [
         component: () => import('@/views/poor/user/info'),
         name: 'PoorUser',
         meta: { title: '人员信息', icon: 'user' }
+      },
+      {
+        path: 'family/:familyId/:masterCardId',
+        component: () => import('@/views/poor/family/info'),
+        name: 'PoorFamily',
+        meta: { title: '家庭信息', icon: 'user' }
       }
     ]
   }

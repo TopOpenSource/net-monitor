@@ -90,4 +90,16 @@ public class UserController extends BaseController {
         queryWrapper.select("id","card_id","name");
         return userService.list(queryWrapper);
     }
+
+    /**
+     * 查询家庭成员
+     * @param familyId
+     * @return
+     */
+    @GetMapping("/listFamily/{id}")
+    public List<User> listFamily(@PathVariable("id") Long familyId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("family_id",familyId);
+        return userService.list(queryWrapper);
+    }
 }

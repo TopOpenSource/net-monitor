@@ -241,7 +241,7 @@ export default {
     },
     handleView(row) {
       this.$router.push({
-        path: "/poor/user/"+row.id+"/"+row.cardId,
+        path: "/poor/family/"+row.id+"/"+row.masterCardId,
       });
     },
     /** 修改按钮操作 */

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import family from "@/views/poor/family/index.vue";
 
 export function getInfo(id) {
   return request({
@@ -20,6 +21,14 @@ export function list(query) {
 export function listAll() {
   return request({
     url: '/poor/user/listAll',
+    method: 'get'
+  })
+}
+
+// 查询家庭成员
+export function listFamily(familyId) {
+  return request({
+    url: '/poor/user/listFamily/'+familyId,
     method: 'get'
   })
 }
