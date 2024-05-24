@@ -32,6 +32,13 @@ export default {
   mounted(){
      this.initData()
   },
+  watch:{
+    year(value,oldValue){
+      if(value!=oldValue){
+        this.initData()
+      }
+    }
+  },
   methods: {
     initData(){
       list({cardId:this.cardId,subsidyType:this.subsidyType,year:this.year}).then(res=>{

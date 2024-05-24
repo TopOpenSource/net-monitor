@@ -17,7 +17,7 @@ public class SubsidyAllYearDto {
     /**
      * 年
      */
-    private List<Long> yearDataIdList;
+    private int[] years;
 
     /**
      * 类型

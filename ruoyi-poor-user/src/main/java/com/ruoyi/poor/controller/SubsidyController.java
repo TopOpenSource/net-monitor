@@ -7,6 +7,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.poor.domain.DataFile;
 import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.domain.User;
+import com.ruoyi.poor.dto.SubsidyAllYearDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.service.SubsidyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class SubsidyController extends BaseController {
     }
 
     @PostMapping("selGroupYearType")
-    public List<SubsidyDto> selSubsidyGroupYearType(@RequestBody SubsidyDto dto) {
+    public SubsidyAllYearDto selSubsidyGroupYearType(@RequestBody SubsidyDto dto) {
         return subsidyService.selSubsidyGroupYearType(dto);
     }
 

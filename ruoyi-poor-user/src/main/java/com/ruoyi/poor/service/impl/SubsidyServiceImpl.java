@@ -1,8 +1,10 @@
 package com.ruoyi.poor.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.poor.domain.Subsidy;
+import com.ruoyi.poor.dto.SubsidyAllYearDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.mapper.SubsidyMapper;
 import com.ruoyi.poor.service.SubsidyService;
@@ -27,7 +29,7 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     }
 
     @Override
-    public List<SubsidyDto> selSubsidyGroupYearType(SubsidyDto dto) {
+    public SubsidyAllYearDto selSubsidyGroupYearType(SubsidyDto dto) {
         //类型
         List<SubsidyDto> subsidyTypes = this.baseMapper.getSubsidyTypes(dto);
         //获取年份跨度
@@ -35,6 +37,11 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
 
         //获取类型-年份-补贴
         List<SubsidyDto> subsidyDtoList= this.baseMapper.selSubsidyGroupYearType(dto);
+
+
+        int[] years=NumberUtil.range(maxMinYear.getMinYear(), maxMinYear.getMaxYear());
+        SubsidyAllYearDto subsidyAllYearDto = new SubsidyAllYearDto();
+        subsidyAllYearDto.setYears(years);
 
         /**
          * 类型数据处理
@@ -48,11 +55,12 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
 
             List<BigDecimal> moneyDataList=new ArrayList<>();
             //遍历年份 没有的设为0
-            for(Integer i=maxMinYear.getMaxYear();i>=maxMinYear.getMinYear();i--){
+            for(int i=0;i<years.length;i++){
                 BigDecimal money=new BigDecimal(0);
                 //过滤数据
+                int finalI=years[i];
                 List<SubsidyDto> data = subsidyDtoList.stream().filter(subsidyDto -> {
-                    return (subsidyDto.getYear().equals(i) ) && (subsidyDto.getSubsidyType().equals(typeDto.getSubsidyType()));
+                    return (subsidyDto.getYear().intValue()==finalI) && (subsidyDto.getSubsidyType().equals(typeDto.getSubsidyType()));
                 }).collect(Collectors.toList());
 
                 if(data.size()>0){
@@ -64,6 +72,7 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
             typeDtoList.add(typeDto);
         });
 
-        return typeDtoList;
+        subsidyAllYearDto.setSubsidyDtos(typeDtoList);
+        return subsidyAllYearDto;
     }
 }

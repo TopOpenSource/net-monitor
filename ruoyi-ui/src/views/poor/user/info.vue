@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="false">
     <el-row :gutter="20">
       <el-col :span="6" :xs="24">
         <el-card class="box-card">
@@ -85,7 +85,7 @@
           <el-tabs v-model="activeTab">
             <template v-for="item in dict.type.subsidy_type">
               <el-tab-pane :label="item.label" :name="item.value">
-                 <subsidy-table :card-id="userInfo.cardId" :subsidy-type="item.value" :year=" currentYear"></subsidy-table>
+                 <subsidy-table :card-id="userInfo.cardId" :subsidy-type="item.value" :year="currentYear.getFullYear()"></subsidy-table>
               </el-tab-pane>
             </template>
           </el-tabs>
@@ -111,16 +111,23 @@ export default {
       userInfo:{
 
       },
-      currentYear: (new Date()).getFullYear(),
+      currentYear: new Date(),
       activeTab:'0',
       tableData:[],
-      subsidyType:null,
-      subsidyYear:null
+      subsidyType:null,//当年类型统计
+      subsidyYear:null //个人按年统计
     };
   },
   created() {
     this.userId=this.$route.params.userId
     this.initData()
+  },
+  watch: {
+    currentYear(value,oldValue) {
+      if(value!=oldValue){
+        this.statistics()
+      }
+    }
   },
   mounted(){
 
@@ -148,7 +155,7 @@ export default {
       })
     },
     statistics(){
-      selGroupType({cardId:this.userInfo.cardId,year:this.currentYear}).then(res=>{
+      selGroupType({cardId:this.userInfo.cardId,year:this.currentYear.getFullYear()}).then(res=>{
         this.formartSubsidy(res)
 
         this.subsidyType = echarts.init(this.$refs.subsidyType);
@@ -194,8 +201,22 @@ export default {
     },
     statistics2(){
       selGroupYearType({cardId:this.userInfo.cardId}).then(res=>{
+        let series=[]
+        res.subsidyDtos.forEach(subType=>{
+          series.push( {
+            name: subType.subsidyTypeCN,
+            type: 'bar',
+            stack: 'total',
+            label: {
+              show: true
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: subType.moneyDataList
+          },)
+        })
 
-        console.log(res)
 
         this.subsidyYear = echarts.init(this.$refs.subsidyYear);
         this.subsidyYear.setOption({
@@ -217,47 +238,9 @@ export default {
           },
           yAxis: {
             type: 'category',
-            data: ['2021', '2022', '2023', '2024']
+            data: res.years
           },
-          series: [
-            {
-              name: '老年补贴',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [100, 100, 120, 119]
-            },
-            {
-              name: '伤残补贴',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [100, 150, 0, 150]
-            },
-            {
-              name: '低保补贴',
-              type: 'bar',
-              stack: 'total',
-              label: {
-                show: true
-              },
-              emphasis: {
-                focus: 'series'
-              },
-              data: [1000, 800, 1000, 1000]
-            },
-
-          ]
+          series: series
         });
       })
 
