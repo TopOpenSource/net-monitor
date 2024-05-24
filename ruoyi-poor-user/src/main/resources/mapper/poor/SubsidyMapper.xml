@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="cardId != null  and cardId != ''">and t1.card_id like concat('%', #{cardId}, '%')</if>
             <if test="subsidyType != null  and subsidyType != ''">and t1.subsidy_type = #{subsidyType}</if>
             <if test="year != null">and YEAR(t1.subsidy_date) = #{year}</if>
+            <if test="fileId != null">and t1.data_file_id =#{fileId}</if>
         </where>
 
     </select>

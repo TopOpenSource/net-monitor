@@ -49,5 +49,8 @@ public class SubsidyDto {
 
     private String fileName;
 
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long fileId;
+
 
 }

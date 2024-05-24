@@ -20,8 +20,8 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="文件来源" prop="live">
-        <el-select v-model="queryParams.subsidyType" clearable>
+      <el-form-item label="文件来源" prop="fileId">
+        <el-select v-model="queryParams.fileId" clearable>
           <el-option
             v-for="dict in fileList"
             :key="dict.id"
@@ -53,6 +53,7 @@
       <el-table-column label="姓名" width="100" align="center" prop="userName">
       </el-table-column>
       <el-table-column label="身份证号" width="200" align="center" prop="cardId"/>
+      <el-table-column label="金额"  align="center" prop="money"/>
       <el-table-column label="补贴类型" align="center" prop="subsidyType" width="200">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.subsidy_type" :value="scope.row.subsidyType"/>

@@ -108,7 +108,7 @@ export const constantRoutes = [
       },
       {
         path: 'subsidy/edit',
-        component: () => import('@/views/poor/subsidy/SubsidyEdit.vue'),
+        component: () => import('@/views/poor/subsidy/index.vue'),
         name: 'SubsidyEdit',
         meta: { title: '原始数据', icon: 'user' }
       }
