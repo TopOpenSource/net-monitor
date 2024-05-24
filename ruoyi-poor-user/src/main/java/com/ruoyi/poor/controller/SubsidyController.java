@@ -1,9 +1,11 @@
 package com.ruoyi.poor.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.poor.domain.DataFile;
 import com.ruoyi.poor.domain.Subsidy;
@@ -12,9 +14,12 @@ import com.ruoyi.poor.dto.FamilyDto;
 import com.ruoyi.poor.dto.SubsidyAllYearDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.service.SubsidyService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -26,17 +31,17 @@ public class SubsidyController extends BaseController {
     @PostMapping("list")
     public List<Subsidy> list(@RequestBody SubsidyDto dto) {
         QueryWrapper<Subsidy> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(dto.getCardId())){
-            queryWrapper.eq("card_id",dto.getCardId());
+        if (StringUtils.isNotEmpty(dto.getCardId())) {
+            queryWrapper.eq("card_id", dto.getCardId());
         }
 
-        if(StringUtils.isNotEmpty(dto.getSubsidyType())){
-            queryWrapper.eq("subsidy_type",dto.getSubsidyType());
+        if (StringUtils.isNotEmpty(dto.getSubsidyType())) {
+            queryWrapper.eq("subsidy_type", dto.getSubsidyType());
         }
 
         //查询某一年
-        if(dto.getYear()!=null){
-            queryWrapper.eq("YEAR(subsidy_date)",dto.getYear());
+        if (dto.getYear() != null) {
+            queryWrapper.eq("YEAR(subsidy_date)", dto.getYear());
         }
         return subsidyService.list(queryWrapper);
     }
@@ -54,6 +59,7 @@ public class SubsidyController extends BaseController {
 
     /**
      * 查询数据列表--原始数据
+     *
      * @param dto
      * @return
      */
@@ -65,5 +71,32 @@ public class SubsidyController extends BaseController {
         return getDataTable(results);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("del/{ids}")
+    public AjaxResult remove(@PathVariable Long[] ids) {
+        subsidyService.removeBatchByIds(Arrays.asList(ids));
+        return AjaxResult.success(0);
+    }
 
+    /**
+     * 更新
+     *
+     * @param subsidy
+     * @return
+     */
+    @PostMapping("update")
+    public AjaxResult update(@RequestBody Subsidy subsidy) {
+        subsidyService.saveOrUpdate(subsidy);
+        return AjaxResult.success(0);
+    }
+
+    @GetMapping("info/{id}")
+    public Subsidy get(@PathVariable Long id) {
+        return subsidyService.getById(id);
+    }
 }

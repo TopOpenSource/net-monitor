@@ -38,11 +38,9 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
+
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-upload2" size="mini" @click="">批量删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -77,12 +75,24 @@
       @pagination="getList"
     />
 
+    <el-dialog :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="金额" prop="money">
+          <el-input v-model="form.money"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 
-import {selSubsidyList} from "@/api/poor/subsidy";
+import {selSubsidyList,del,update,getInfo} from "@/api/poor/subsidy";
 import {listAll} from "@/api/poor/dataFile";
 export default {
   name: "PoorUser",
@@ -117,7 +127,11 @@ export default {
       },
       // 表单参数
       form: {},
-
+      rules: {
+        money: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+      }
     };
   },
   created() {
@@ -148,16 +162,7 @@ export default {
     reset() {
       this.form = {
         id: null,
-        familyId: null,
-        cardId: null,
-        name: null,
-        sex: null,
-        birthday: null,
-        disability: null,
-        disabilityId: null,
-        live: null,
-        phone: null,
-        address: null
+        money:null
       };
       this.resetForm("form");
     },
@@ -173,7 +178,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.postId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
@@ -195,27 +200,33 @@ export default {
       getInfo(row.id).then(response => {
         this.form = response;
         this.open = true;
-        this.title = "修改贫困人员";
+        this.title = "修改信息";
       });
     },
-    handleSaveCancel(){
-      this.open=false
-      this.reset()
-    },
-    /**保存成功**/
-    handleSaveSuccess(){
-      this.open=false
-      this.getList()
-      this.$modal.msgSuccess("修改成功");
-    },
+
     /** 删除按钮操作 */
     handleDelete(row) {
+      console.log(this.ids)
+      const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除？').then(function () {
-        return del(row.id);
+        return del(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
+      });
+    },
+
+    /** 提交按钮 */
+    submitForm: function () {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          update(this.form).then(response => {
+            this.getList()
+            this.open=false
+            this.$modal.msgSuccess("操作成功");
+          })
+        }
       });
     },
   }

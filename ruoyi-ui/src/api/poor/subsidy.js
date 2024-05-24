@@ -32,3 +32,25 @@ export function selSubsidyList(query) {
     params: query
   })
 }
+
+export function del(ids) {
+  return request({
+    url: '/poor/subsidy/del/' + ids,
+    method: 'delete'
+  })
+}
+
+export function update(data) {
+  return request({
+    url: '/poor/subsidy/update',
+    method: 'post',
+    data:data
+  })
+}
+
+export function getInfo(id) {
+  return request({
+    url: '/poor/subsidy/info/'+id,
+    method: 'get',
+  })
+}
