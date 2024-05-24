@@ -5,6 +5,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>户籍信息</span>
+            <el-button  @click="handleEdit(userInfo)" type="primary" icon="el-icon-edit" circle style="float: right" size="mini"></el-button>
           </div>
           <div>
             <ul class="list-group list-group-striped">
@@ -93,6 +94,8 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <UserEdit :form="userInfo" :openView="open" :title="title" @success="handleSaveSuccess" @cancelOpt="handleSaveCancel"></UserEdit>
   </div>
 </template>
 
@@ -101,12 +104,15 @@ import subsidyTable from "./subsidyTable.vue";
 import * as echarts from "echarts";
 import {getInfo} from "@/api/poor/user";
 import {selGroupType, selGroupYearType} from "../../../api/poor/subsidy";
+import UserEdit from "@/views/poor/user/UserEdit.vue";
 export default {
   name: "Profile",
   dicts: ['yes_no', 'sys_user_sex', 'village','subsidy_type'],
-  components: {subsidyTable},
+  components: {UserEdit, subsidyTable},
   data() {
     return {
+      title:'信息修改',
+      open:false,
       userId:undefined,
       cardId:undefined,
       userInfo:{
@@ -135,6 +141,17 @@ export default {
 
   },
   methods: {
+    handleEdit(userInfo){
+      this.open=true
+    },
+    handleSaveSuccess(){
+      this.open=false
+      this.$modal.msgSuccess("修改成功");
+      this.initData()
+    },
+    handleSaveCancel(){
+      this.open=false
+    },
     initData(){
       //获取用户信息
       getInfo(this.userId).then(res=>{

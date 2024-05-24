@@ -106,7 +106,7 @@
       @pagination="getList"
     />
 
-    <UserEdit :form="form" :open="open" :title="title" @success="handleSaveSuccess"></UserEdit>
+    <UserEdit :form="form" :openView="open" :title="title" @success="handleSaveSuccess" @cancelOpt="handleSaveCancel"></UserEdit>
 
     <el-dialog :title="importDialog.title" :visible.sync="importDialog.open" width="500px" :close-on-click-modal="false" append-to-body>
      <ExcelFileUpload @success="importSuccess"></ExcelFileUpload>
@@ -240,6 +240,10 @@ export default {
         this.open = true;
         this.title = "修改贫困人员";
       });
+    },
+    handleSaveCancel(){
+      this.open=false
+      this.reset()
     },
     /**保存成功**/
     handleSaveSuccess(){

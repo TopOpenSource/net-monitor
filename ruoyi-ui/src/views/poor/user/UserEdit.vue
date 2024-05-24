@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-loading="loading" :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false" append-to-body>
+    <el-dialog v-loading="loading" :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false" append-to-body @close="cancel">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
 
         <el-form-item label="姓名" prop="name">
@@ -83,15 +83,21 @@ export default {
     form:{
 
     },
-    open:{
+    openView:{
       default:false
     },
     title:{
 
     }
   },
+  watch:{
+    openView(value){
+      this.open=value
+    }
+  },
   data() {
     return {
+      open:false,
       loading:false,
       // 表单校验
       rules: {
@@ -126,7 +132,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
-      this.reset();
+      this.$emit("cancelOpt")
     },
 
     /** 提交按钮 */

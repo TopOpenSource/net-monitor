@@ -55,7 +55,7 @@
       </el-col>
       </template>
 
-      <UserEdit :form="form" :open="open" :title="title" @success="handleSaveSuccess"></UserEdit>
+      <UserEdit :form="form" :open-view="open" :title="title" @success="handleSaveSuccess" @cancelOpt="handleSaveCancel"></UserEdit>
     </el-row>
   </div>
 </template>
@@ -94,7 +94,9 @@ export default {
         this.familyList=res
       })
     },
-
+    handleSaveCancel(){
+      this.open=false
+    },
     handleView(row) {
       this.$router.push({
         path: "/poor/user/"+row.id+"/"+row.cardId,
