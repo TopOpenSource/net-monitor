@@ -1,6 +1,7 @@
 package com.ruoyi.poor.domain;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.converters.string.StringStringConverter;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -28,11 +29,11 @@ public class User extends BaseEntity {
     @TableField("family_id")
     private Long familyId;
 
-    @ExcelProperty(value = "身份证号")
+    @ExcelProperty(value = "身份证号",converter = StringStringConverter.class)
     @TableField("card_id")
     private String cardId;
 
-    @ExcelProperty(value = "姓名")
+    @ExcelProperty(value = "姓名",converter = StringStringConverter.class)
     @TableField("name")
     private String name;
 
@@ -54,7 +55,7 @@ public class User extends BaseEntity {
     /**
      * 残疾证号
      */
-    @ExcelProperty(value = "残疾证号")
+    @ExcelProperty(value = "残疾证号",converter = StringStringConverter.class)
     @TableField("disability_id")
     private String disabilityId;
 
@@ -65,15 +66,14 @@ public class User extends BaseEntity {
     @TableField("live")
     private String live;
 
-    @ExcelProperty(value = "手机号")
+    @ExcelProperty(value = "手机号",converter = StringStringConverter.class)
     @TableField("phone")
     private String phone;
 
-    @ExcelProperty(value = "详细地址")
+    @ExcelProperty(value = "详细地址",converter = StringStringConverter.class)
     @TableField("address")
     private String address;
 
-    @ExcelProperty(value = "村落")
     @TableField("village")
     private String village;
 }

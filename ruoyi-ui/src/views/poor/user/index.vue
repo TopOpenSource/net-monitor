@@ -334,7 +334,7 @@ export default {
     },
     handleView(row) {
       this.$router.push({
-        path: "/poor/user/"+row.id,
+        path: "/poor/user/"+row.id+"/"+row.cardId,
       });
     },
     /** 修改按钮操作 */

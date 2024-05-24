@@ -85,7 +85,7 @@
           <el-tabs v-model="activeTab">
             <template v-for="item in dict.type.subsidy_type">
               <el-tab-pane :label="item.label" :name="item.value">
-                 <subsidy-table :card-id="userInfo.cardId" :subsidy-type="item.value" :year="currentYear.getFullYear()"></subsidy-table>
+                 <subsidy-table :card-id="cardId" :subsidy-type="item.value" :year="currentYear.getFullYear()"></subsidy-table>
               </el-tab-pane>
             </template>
           </el-tabs>
@@ -108,6 +108,7 @@ export default {
   data() {
     return {
       userId:undefined,
+      cardId:undefined,
       userInfo:{
 
       },
@@ -120,6 +121,7 @@ export default {
   },
   created() {
     this.userId=this.$route.params.userId
+    this.cardId=this.$route.params.cardId
     this.initData()
   },
   watch: {
@@ -155,7 +157,7 @@ export default {
       })
     },
     statistics(){
-      selGroupType({cardId:this.userInfo.cardId,year:this.currentYear.getFullYear()}).then(res=>{
+      selGroupType({cardId:this.cardId,year:this.currentYear.getFullYear()}).then(res=>{
         this.formartSubsidy(res)
 
         this.subsidyType = echarts.init(this.$refs.subsidyType);
@@ -200,7 +202,7 @@ export default {
 
     },
     statistics2(){
-      selGroupYearType({cardId:this.userInfo.cardId}).then(res=>{
+      selGroupYearType({cardId:this.cardId}).then(res=>{
         if(res==""){
           return
         }
