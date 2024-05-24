@@ -1,6 +1,5 @@
 <template>
-  <div class="app-container">
-
+  <div class="app-container" >
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-upload2" size="mini" @click="handleAdd">导入</el-button>
@@ -32,8 +31,7 @@
 
 
     <el-dialog :title="title" :visible.sync="open" width="500px" :close-on-click-modal="false" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-
+      <el-form ref="form" v-loading="loading" :model="form" :rules="rules" label-width="100px" >
         <el-form-item prop="fileName">
           <ExcelFileUpload v-model="excelDataFile"></ExcelFileUpload>
         </el-form-item>
@@ -208,12 +206,14 @@ export default {
     submitForm: function () {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.loading=true
           this.form.fileName = this.excelDataFile.fileName
           this.form.filePath = this.excelDataFile.filePath
 
           saveAndImport(this.form).then(response => {
             this.$modal.msgSuccess("操作成功");
             this.open = false;
+            this.loading=false
             this.getList();
           });
         }
