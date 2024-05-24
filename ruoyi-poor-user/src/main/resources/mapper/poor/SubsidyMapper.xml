@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.poor.mapper.SubsidyMapper">
+
+    <select id="selSubsidyList" parameterType="com.ruoyi.poor.dto.SubsidyDto"  resultType="com.ruoyi.poor.dto.SubsidyDto">
+        select
+        t1.id,t1.card_id,t1.subsidy_type,t1.subsidy_date, t1.money,t2.`name` as userName ,t3.file_name as fileName
+        from poor_subsidy t1
+        left join poor_user t2 on t1.card_id=t2.card_id
+        left join poor_data_file t3 on t1.data_file_id=t3.id
+        <where>
+            <if test="cardId != null  and cardId != ''">and t1.card_id like concat('%', #{cardId}, '%')</if>
+            <if test="subsidyType != null  and subsidyType != ''">and t1.subsidy_type = #{subsidyType}</if>
+            <if test="year != null">and YEAR(t1.subsidy_date) = #{year}</if>
+        </where>
+
+    </select>
+
+</mapper>

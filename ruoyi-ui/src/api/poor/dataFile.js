@@ -25,3 +25,10 @@ export function delFileAndRecord(id) {
     method: 'delete',
   })
 }
+
+export function listAll() {
+  return request({
+    url: '/poor/dataFile/listAll',
+    method: 'get',
+  })
+}

@@ -23,3 +23,12 @@ export function selGroupYearType(data) {
     data:data
   })
 }
+
+
+export function selSubsidyList(query) {
+  return request({
+    url: '/poor/subsidy/selSubsidyList',
+    method: 'get',
+    params: query
+  })
+}

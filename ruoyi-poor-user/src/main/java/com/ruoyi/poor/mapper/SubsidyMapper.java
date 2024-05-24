@@ -48,4 +48,6 @@ public interface SubsidyMapper extends BaseMapper<Subsidy> {
             "from poor_subsidy t1 left join sys_dict_data t2 on t1.subsidy_type=t2.dict_value " +
             "where t2.dict_type='subsidy_type'  and t1.card_id=#{cardId}")
     List<SubsidyDto> getSubsidyTypes(SubsidyDto dto);
+
+    List<SubsidyDto> selSubsidyList(SubsidyDto dto);
 }

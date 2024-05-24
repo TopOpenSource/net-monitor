@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,5 +83,10 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
 
         subsidyAllYearDto.setSubsidyDtos(typeDtoList);
         return subsidyAllYearDto;
+    }
+
+    @Override
+    public List<SubsidyDto> selSubsidyList(SubsidyDto dto) {
+        return this.baseMapper.selSubsidyList(dto);
     }
 }

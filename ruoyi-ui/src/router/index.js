@@ -105,6 +105,12 @@ export const constantRoutes = [
         component: () => import('@/views/poor/family/info'),
         name: 'PoorFamily',
         meta: { title: '家庭信息', icon: 'user' }
+      },
+      {
+        path: 'subsidy/edit',
+        component: () => import('@/views/poor/subsidy/SubsidyEdit.vue'),
+        name: 'SubsidyEdit',
+        meta: { title: '原始数据', icon: 'user' }
       }
     ]
   }

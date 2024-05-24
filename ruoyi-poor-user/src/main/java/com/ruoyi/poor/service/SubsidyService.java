@@ -21,4 +21,6 @@ public interface SubsidyService extends IService<Subsidy> {
      * @param dto
      */
     SubsidyAllYearDto selSubsidyGroupYearType(SubsidyDto dto);
+
+    List<SubsidyDto> selSubsidyList(SubsidyDto dto);
 }

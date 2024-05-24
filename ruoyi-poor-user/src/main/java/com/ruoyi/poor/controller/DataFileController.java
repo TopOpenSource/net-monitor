@@ -3,6 +3,7 @@ package com.ruoyi.poor.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.read.metadata.ReadSheet;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -98,6 +99,18 @@ public class DataFileController extends BaseController {
     public AjaxResult delFileAndRecord(@PathVariable("id") Long id) {
         dataFileService.delFileAndRecord(id);
         return AjaxResult.success(0);
+    }
+
+    /**
+     * 列出所有文件 供查询
+     * @return
+     */
+    @GetMapping("/listAll")
+    public List<DataFile> listAll() {
+        QueryWrapper<DataFile> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id","file_name");
+        List<DataFile> list = dataFileService.list(queryWrapper);
+        return list;
     }
 
 }

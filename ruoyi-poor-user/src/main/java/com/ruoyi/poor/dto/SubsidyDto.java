@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -31,4 +32,22 @@ public class SubsidyDto {
 
     private Integer minYear;
     private Integer maxYear;
+
+
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long dataFileId;
+    /**
+     * 月份
+     */
+    @JsonFormat(pattern = "yyyy-MM")
+    private Date subsidyDate;
+
+    private String userName;
+
+    private String fileName;
+
+
 }

@@ -3,18 +3,17 @@ package com.ruoyi.poor.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.poor.domain.DataFile;
 import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.domain.User;
+import com.ruoyi.poor.dto.FamilyDto;
 import com.ruoyi.poor.dto.SubsidyAllYearDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.service.SubsidyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class SubsidyController extends BaseController {
     private SubsidyService subsidyService;
 
     @PostMapping("list")
-    public List<Subsidy> saveAndImport(@RequestBody SubsidyDto dto) {
+    public List<Subsidy> list(@RequestBody SubsidyDto dto) {
         QueryWrapper<Subsidy> queryWrapper = new QueryWrapper<>();
         if(StringUtils.isNotEmpty(dto.getCardId())){
             queryWrapper.eq("card_id",dto.getCardId());
@@ -53,6 +52,18 @@ public class SubsidyController extends BaseController {
         return subsidyService.selSubsidyGroupYearType(dto);
     }
 
+    /**
+     * 查询数据列表--原始数据
+     * @param dto
+     * @return
+     */
+
+    @GetMapping("selSubsidyList")
+    public TableDataInfo selSubsidyList(SubsidyDto dto) {
+        startPage();
+        List<SubsidyDto> results = subsidyService.selSubsidyList(dto);
+        return getDataTable(results);
+    }
 
 
 }
