@@ -1,3 +1,6 @@
+server:
+    # 服务器的HTTP端口，默认为8080
+    port: 8080
 ruoyi:
     # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
     profile: D:/poor/uploadPath
