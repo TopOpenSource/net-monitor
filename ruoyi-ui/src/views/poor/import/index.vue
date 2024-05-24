@@ -4,11 +4,6 @@
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-upload2" size="mini" @click="handleAdd">导入</el-button>
       </el-col>
-
-      <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-upload2" size="mini" @click="handleViewData">原始数据查看</el-button>
-      </el-col>
-
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
