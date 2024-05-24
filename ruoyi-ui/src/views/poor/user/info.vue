@@ -169,7 +169,7 @@ export default {
           },
           series: [
             {
-              name: 'Access From',
+              name: '各类补贴',
               type: 'pie',
               radius: ['40%', '70%'],
               avoidLabelOverlap: false,
@@ -201,6 +201,10 @@ export default {
     },
     statistics2(){
       selGroupYearType({cardId:this.userInfo.cardId}).then(res=>{
+        if(res==""){
+          return
+        }
+
         let series=[]
         res.subsidyDtos.forEach(subType=>{
           series.push( {

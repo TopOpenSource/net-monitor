@@ -32,11 +32,19 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     public SubsidyAllYearDto selSubsidyGroupYearType(SubsidyDto dto) {
         //类型
         List<SubsidyDto> subsidyTypes = this.baseMapper.getSubsidyTypes(dto);
+
+        //无数据则返回空
+        if (subsidyTypes.size() <1) {
+            return null;
+        }
+
+
         //获取年份跨度
         SubsidyDto maxMinYear = this.baseMapper.getMaxMinYear(dto);
 
         //获取类型-年份-补贴
         List<SubsidyDto> subsidyDtoList= this.baseMapper.selSubsidyGroupYearType(dto);
+
 
 
         int[] years=NumberUtil.range(maxMinYear.getMinYear(), maxMinYear.getMaxYear());

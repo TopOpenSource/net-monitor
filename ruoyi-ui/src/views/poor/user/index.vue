@@ -57,7 +57,9 @@
 
     <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
       <el-table-column label="姓名" width="80" align="center" prop="name">
-
+        <template slot-scope="scope">
+           <span @click="handleView(scope.row)" style="cursor: pointer;color: #409eff">{{ scope.row.name }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="手机号" width="150" align="center" prop="phone"/>
       <el-table-column label="身份证号" width="200" align="center" prop="cardId"/>
@@ -91,7 +93,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleView(scope.row)">查看</el-button>
+          <el-button size="mini" type="text" icon="el-icon-search" @click="handleView(scope.row)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -258,9 +260,6 @@ export default {
           {required: true, message: "不能为空", trigger: "blur"}
         ],
         live: [
-          {required: true, message: "不能为空", trigger: "blur"}
-        ],
-        village: [
           {required: true, message: "不能为空", trigger: "blur"}
         ]
       }
