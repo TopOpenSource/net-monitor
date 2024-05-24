@@ -6,7 +6,10 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>{{userInfo.name}}</span>
-            <el-button type="success"  style="margin-left: 20px" v-if="userInfo.cardId==masterCardId">户主</el-button>
+            <el-tag v-if="userInfo.cardId==masterCardId"  style="margin-left: 20px;" type="success">户主</el-tag>
+
+            <el-button  @click="handleView(userInfo)" type="success" icon="el-icon-search" circle style="float: right;margin-left: 5px" size="mini"></el-button>
+            <el-button  @click="handleEdit(userInfo)" type="primary" icon="el-icon-edit" circle style="float: right" size="mini"></el-button>
           </div>
           <div>
             <ul class="list-group list-group-striped">
@@ -51,6 +54,8 @@
         </el-card>
       </el-col>
       </template>
+
+      <UserEdit :form="form" :open="open" :title="title" @success="handleSaveSuccess"></UserEdit>
     </el-row>
   </div>
 </template>
@@ -58,15 +63,19 @@
 <script>
 
 import {listFamily} from "@/api/poor/user";
+import UserEdit from "@/views/poor/user/UserEdit.vue";
 export default {
   name: "Profile",
-  dicts: ['yes_no', 'sys_user_sex', 'village','subsidy_type'],
+  components: {UserEdit},
+  dicts: ['yes_no', 'sys_user_sex','subsidy_type'],
   data() {
     return {
       familyId:undefined,
       masterCardId:undefined,//户主身份证号
       familyList:[],
-      userInfo:{}
+      form:{},
+      title:'修改信息',
+      open:false,
     };
   },
   created() {
@@ -84,6 +93,22 @@ export default {
       listFamily(this.familyId).then(res=>{
         this.familyList=res
       })
+    },
+
+    handleView(row) {
+      this.$router.push({
+        path: "/poor/user/"+row.id+"/"+row.cardId,
+      });
+    },
+    handleEdit(userInfo){
+       this.form=userInfo
+       this.open=true
+
+    },
+    handleSaveSuccess(){
+      this.open=false
+      this.initData()
+      this.$modal.msgSuccess("修改成功");
     },
   }
 };
