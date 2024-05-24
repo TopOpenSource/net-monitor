@@ -80,5 +80,14 @@ public class UserController extends BaseController {
         return AjaxResult.success(userService.importData(file));
     }
 
-
+    /**
+     * 查询用户
+     * @return
+     */
+    @GetMapping("/listAll")
+    public List<User> list() {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id","card_id","name");
+        return userService.list(queryWrapper);
+    }
 }

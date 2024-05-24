@@ -1,4 +1,4 @@
-package com.ruoyi.poor.domain;
+package com.ruoyi.poor.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -7,39 +7,44 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.poor.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("poor_family")
-public class Family extends BaseEntity {
+public class FamilyDto{
     @JsonSerialize(using = ToStringSerializer.class)
-    @TableId
     private Long id;
 
-    /**
-     * 户主
-     */
-    @TableField("master_card_id")
+
     private String masterCardId;
 
-    @ExcelProperty(value = "地址")
-    @TableField("address")
+    private User master;
+
     private String address;
+
+    /**
+     * 成员 cardIds
+     */
+    private List<String> cardIds;
 
     /**
      * 村庄
      */
-    @ExcelProperty(value = "村庄")
-    @TableField("village")
     private String village;
+
+    /**
+     * 户主姓名
+     */
+    private String masterName;
 
     /**
      * 家人数量
      */
-    @TableField("family_count")
     private Integer familyCount;
 }
