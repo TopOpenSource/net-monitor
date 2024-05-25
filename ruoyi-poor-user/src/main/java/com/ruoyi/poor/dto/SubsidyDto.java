@@ -26,9 +26,7 @@ public class SubsidyDto {
     private Integer year;
     private BigDecimal money;
 
-
     private List<BigDecimal> moneyDataList;
-
 
     private Integer minYear;
     private Integer maxYear;
@@ -53,4 +51,8 @@ public class SubsidyDto {
     private Long fileId;
 
 
+    //数据分析模块使用
+    private Integer unit;
+    @JsonFormat(pattern = "yyyy-MM")
+    private List<Date> dateRange;
 }

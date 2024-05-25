@@ -51,8 +51,8 @@
       <el-table-column label="姓名" width="100" align="center" prop="userName">
       </el-table-column>
       <el-table-column label="身份证号" width="200" align="center" prop="cardId"/>
-      <el-table-column label="金额"  align="center" prop="money"/>
-      <el-table-column label="补贴类型" align="center" prop="subsidyType" width="200">
+      <el-table-column label="金额"  align="center" prop="money" width="80"/>
+      <el-table-column label="补贴类型" align="center"  prop="subsidyType" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.subsidy_type" :value="scope.row.subsidyType"/>
         </template>

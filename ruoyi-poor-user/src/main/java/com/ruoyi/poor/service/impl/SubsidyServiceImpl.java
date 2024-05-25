@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.dto.SubsidyAllYearDto;
+import com.ruoyi.poor.dto.SubsidyAnalysisDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.mapper.SubsidyMapper;
 import com.ruoyi.poor.service.SubsidyService;
@@ -88,5 +89,11 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     @Override
     public List<SubsidyDto> selSubsidyList(SubsidyDto dto) {
         return this.baseMapper.selSubsidyList(dto);
+    }
+
+    @Override
+    public List<SubsidyAnalysisDto> selSubsidyAnalysis(SubsidyDto dto) {
+        List<SubsidyAnalysisDto> subsidyAnalysisDto = this.baseMapper.selSubsidyAnalysis(dto);
+        return subsidyAnalysisDto;
     }
 }

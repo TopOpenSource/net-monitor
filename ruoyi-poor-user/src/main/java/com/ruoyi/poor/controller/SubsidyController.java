@@ -12,6 +12,7 @@ import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.domain.User;
 import com.ruoyi.poor.dto.FamilyDto;
 import com.ruoyi.poor.dto.SubsidyAllYearDto;
+import com.ruoyi.poor.dto.SubsidyAnalysisDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.service.SubsidyService;
 import org.apache.commons.lang3.ArrayUtils;
@@ -55,6 +56,16 @@ public class SubsidyController extends BaseController {
     @PostMapping("selGroupYearType")
     public SubsidyAllYearDto selSubsidyGroupYearType(@RequestBody SubsidyDto dto) {
         return subsidyService.selSubsidyGroupYearType(dto);
+    }
+
+    /**
+     * 统计分析
+     * @param dto
+     * @return
+     */
+    @PostMapping("selSubsidyAnalysis")
+    public List<SubsidyAnalysisDto> selSubsidyAnalysis(@RequestBody SubsidyDto dto) {
+        return subsidyService.selSubsidyAnalysis(dto);
     }
 
     /**

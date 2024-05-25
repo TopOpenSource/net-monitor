@@ -19,4 +19,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     </select>
 
+
+    <resultMap id="SubsidyAnalysisDtoMap" type="com.ruoyi.poor.dto.SubsidyAnalysisDto">
+          <result column="card_id" property="cardId"></result>
+          <result column="id" property="userId"></result>
+          <result column="name" property="userName"></result>
+          <result column="subsidy_date" property="subsidyDate"></result>
+
+          <collection property="subsidyList" ofType="com.ruoyi.poor.dto.SubsidyDto">
+              <result column="subsidy_type" property="subsidyType"></result>
+              <result column="money" property="money"></result>
+          </collection>
+    </resultMap>
+    <select id="selSubsidyAnalysis" parameterType="com.ruoyi.poor.dto.SubsidyDto"  resultMap="SubsidyAnalysisDtoMap">
+        select
+            t1.card_id,
+            <if test="unit==0">
+                DATE_FORMAT(t1.subsidy_date,'%Y-%m') as subsidy_date,
+            </if>
+            <if test="unit==1">
+                DATE_FORMAT(t1.subsidy_date,'%Y') as subsidy_date,
+            </if>
+
+            t1.subsidy_type,SUM(t1.money) as money,t2.id,t2.`name`
+        from poor_subsidy t1
+        left join poor_user t2 on t1.card_id=t2.card_id
+        <where>
+            <if test="cardId != null  and cardId != ''">
+              and t1.card_id like concat('%', #{cardId}, '%')
+            </if>
+            <if test="subsidyType != null  and subsidyType != ''">
+              and t1.subsidy_type = #{subsidyType}
+            </if>
+            <!--时间范围-->
+            <if test="dateRange!=null and dateRange.size()>0">
+              and (t1.subsidy_date <![CDATA[ >= ]]>  #{dateRange[0]} and t1.subsidy_date <![CDATA[ <= ]]>  #{dateRange[1]})
+            </if>
+        </where>
+        <if test="unit==0">
+            group by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
+            order by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
+        </if>
+        <if test="unit==1">
+            group by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y'),t1.subsidy_type
+            order by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y'),t1.subsidy_type
+        </if>
+
+    </select>
 </mapper>

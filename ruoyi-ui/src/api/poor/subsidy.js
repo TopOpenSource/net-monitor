@@ -25,6 +25,14 @@ export function selGroupYearType(data) {
 }
 
 
+export function selSubsidyAnalysis(data) {
+  return request({
+    url: '/poor/subsidy/selSubsidyAnalysis',
+    method: 'post',
+    data:data
+  })
+}
+
 export function selSubsidyList(query) {
   return request({
     url: '/poor/subsidy/selSubsidyList',

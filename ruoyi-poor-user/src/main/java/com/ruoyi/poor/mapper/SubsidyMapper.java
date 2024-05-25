@@ -3,6 +3,7 @@ package com.ruoyi.poor.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.poor.domain.Family;
 import com.ruoyi.poor.domain.Subsidy;
+import com.ruoyi.poor.dto.SubsidyAnalysisDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -50,4 +51,6 @@ public interface SubsidyMapper extends BaseMapper<Subsidy> {
     List<SubsidyDto> getSubsidyTypes(SubsidyDto dto);
 
     List<SubsidyDto> selSubsidyList(SubsidyDto dto);
+
+    List<SubsidyAnalysisDto> selSubsidyAnalysis(SubsidyDto dto);
 }
