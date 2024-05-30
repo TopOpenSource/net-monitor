@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,7 +97,17 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
 
     @Override
     public void analysisExport(SubsidyDto dto) {
+        //读取字典
+        Map<String,String> dictDataMap=new HashMap<>();
+        List<SysDictData> sysDictDataList = dictTypeService.selectDictDataByType("");
+        sysDictDataList.forEach(sysDictData -> {
+            dictDataMap.put(sysDictData.getDictValue(),sysDictData.getDictLabel());
+        });
+
+        //数据处理
         List<SubsidyAnalysisDto> subsidyAnalysisDto = this.baseMapper.selSubsidyAnalysis(dto);
+
+
 
     }
 }
