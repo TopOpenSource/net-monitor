@@ -45,8 +45,15 @@
       </el-form-item>
     </el-form>
 
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport">导出</el-button>
+      </el-col>
+    </el-row>
+
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column prop="userName" label="姓名" width="120"></el-table-column>
+      <el-table-column prop="cardId" label="身份证号" width="200"></el-table-column>
       <el-table-column  prop="subsidyDate" label="日期" width="150"></el-table-column>
 
       <template  v-for="item in dict.type.subsidy_type">
@@ -108,6 +115,9 @@ export default {
           }
         }
         return money
+    },
+    handleExport(){
+
     }
   }
 }

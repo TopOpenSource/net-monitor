@@ -3,6 +3,7 @@ package com.ruoyi.poor.service.impl;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.poor.domain.User;
 import com.ruoyi.poor.mapper.UserMapper;
@@ -39,7 +40,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             queryWrapper.eq("card_id", user.getCardId());
             Long count = this.baseMapper.selectCount(queryWrapper);
             if (count > 0) {
-
+                //重复的更新
+                this.update(user, new UpdateWrapper<User>().eq("card_id", user.getCardId()));
             } else {
                 i.getAndIncrement();
                 user.setId(IdUtil.getSnowflakeNextId());

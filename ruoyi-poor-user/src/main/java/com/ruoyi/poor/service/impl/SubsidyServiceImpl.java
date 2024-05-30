@@ -96,4 +96,10 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
         List<SubsidyAnalysisDto> subsidyAnalysisDto = this.baseMapper.selSubsidyAnalysis(dto);
         return subsidyAnalysisDto;
     }
+
+    @Override
+    public void analysisExport(SubsidyDto dto) {
+        List<SubsidyAnalysisDto> subsidyAnalysisDto = this.baseMapper.selSubsidyAnalysis(dto);
+
+    }
 }

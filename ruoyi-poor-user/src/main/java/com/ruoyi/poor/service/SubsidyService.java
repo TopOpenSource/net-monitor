@@ -31,4 +31,10 @@ public interface SubsidyService extends IService<Subsidy> {
      * @return
      */
     List<SubsidyAnalysisDto> selSubsidyAnalysis(SubsidyDto dto);
+
+    /**
+     * 统计分析-导出
+     * @param dto
+     */
+    void analysisExport(SubsidyDto dto);
 }

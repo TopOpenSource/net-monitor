@@ -45,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from poor_subsidy t1
         left join poor_user t2 on t1.card_id=t2.card_id
         <where>
+              t2.card_id is not null
             <if test="cardId != null  and cardId != ''">
               and t1.card_id like concat('%', #{cardId}, '%')
             </if>

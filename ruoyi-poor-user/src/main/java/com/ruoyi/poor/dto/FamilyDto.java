@@ -1,6 +1,7 @@
 package com.ruoyi.poor.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.converters.string.StringStringConverter;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class FamilyDto{
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
-
+    @ExcelProperty(value = "户主身份证号",converter = StringStringConverter.class)
     private String masterCardId;
 
     private User master;
@@ -47,4 +48,7 @@ public class FamilyDto{
      * 家人数量
      */
     private Integer familyCount;
+
+    @ExcelProperty(value = "成员身份证号",converter = StringStringConverter.class)
+    private String cardId;
 }

@@ -69,7 +69,7 @@
       <el-col :span="18" :xs="24">
         <el-card>
           <div slot="header" class="clearfix">
-            <span>补助发放统计-2024年</span>
+            <span>补助发放统计-{{this.currentYear.getFullYear()}}年</span>
             <el-date-picker style="float: right" type="year" v-model=" currentYear" placeholder="选择年分"></el-date-picker>
           </div>
 

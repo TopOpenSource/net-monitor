@@ -2,11 +2,13 @@ package com.ruoyi.poor.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.poor.domain.DataFile;
 import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.domain.User;
@@ -17,9 +19,12 @@ import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.service.SubsidyService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,6 +72,17 @@ public class SubsidyController extends BaseController {
     public List<SubsidyAnalysisDto> selSubsidyAnalysis(@RequestBody SubsidyDto dto) {
         return subsidyService.selSubsidyAnalysis(dto);
     }
+
+    @PostMapping("analysisExport")
+    public void analysisExport(@RequestBody SubsidyDto dto, HttpServletResponse response) throws IOException {
+
+
+
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        FileUtils.setAttachmentResponseHeader(response, dataFile.getFileName());
+        FileUtils.writeBytes(RuoYiConfig.getUploadPath() + path, response.getOutputStream());
+    }
+
 
     /**
      * 查询数据列表--原始数据
