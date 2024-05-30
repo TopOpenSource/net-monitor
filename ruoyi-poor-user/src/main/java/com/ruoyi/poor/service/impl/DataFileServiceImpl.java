@@ -5,6 +5,7 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.poor.domain.DataFile;
 import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.mapper.DataFileMapper;
@@ -31,11 +32,14 @@ public class DataFileServiceImpl extends ServiceImpl<DataFileMapper, DataFile> i
         //写入文件数据
         List<Subsidy> dataList = EasyExcel.read(RuoYiConfig.getUploadPath() + path).head(Subsidy.class).headRowNumber(1).sheet(dataFile.getSheetName()).doReadSync();
         dataList.forEach(data -> {
-            data.setId(IdUtil.getSnowflakeNextId());
-            data.setSubsidyType(dataFile.getSubsidyType());
-            data.setSubsidyDate(dataFile.getSubsidyDate());
-            data.setDataFileId(fileId);
-            subsidyService.save(data);
+            //两者均不为空才可输入
+            if(StringUtils.isNotEmpty(data.getCardId()) && data.getMoney()!=null){
+                data.setId(IdUtil.getSnowflakeNextId());
+                data.setSubsidyType(dataFile.getSubsidyType());
+                data.setSubsidyDate(dataFile.getSubsidyDate());
+                data.setDataFileId(fileId);
+                subsidyService.save(data);
+            }
         });
 
         //保存基本信息
