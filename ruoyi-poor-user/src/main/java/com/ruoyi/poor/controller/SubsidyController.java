@@ -74,13 +74,11 @@ public class SubsidyController extends BaseController {
     }
 
     @PostMapping("analysisExport")
-    public void analysisExport(@RequestBody SubsidyDto dto, HttpServletResponse response) throws IOException {
-
-
-
+    public void analysisExport(SubsidyDto dto, HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        FileUtils.setAttachmentResponseHeader(response, dataFile.getFileName());
-        FileUtils.writeBytes(RuoYiConfig.getUploadPath() + path, response.getOutputStream());
+        FileUtils.setAttachmentResponseHeader(response, "统计清单.xlsx");
+        subsidyService.analysisExport(dto,response.getOutputStream());
+        //FileUtils.writeBytes(RuoYiConfig.getUploadPath() + path, response.getOutputStream());
     }
 
 

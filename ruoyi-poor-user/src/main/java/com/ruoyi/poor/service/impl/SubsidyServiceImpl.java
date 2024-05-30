@@ -1,6 +1,8 @@
 package com.ruoyi.poor.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.poor.domain.Subsidy;
@@ -11,9 +13,11 @@ import com.ruoyi.poor.mapper.SubsidyMapper;
 import com.ruoyi.poor.service.SubsidyService;
 import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysDictTypeService;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,10 +100,10 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     }
 
     @Override
-    public void analysisExport(SubsidyDto dto) {
+    public void analysisExport(SubsidyDto dto, OutputStream outputStream) {
         //读取字典
-        Map<String,String> dictDataMap=new HashMap<>();
-        List<SysDictData> sysDictDataList = dictTypeService.selectDictDataByType("");
+        Map<String,String> dictDataMap=new LinkedHashMap<>();
+        List<SysDictData> sysDictDataList = dictTypeService.selectDictDataByType("subsidy_type");
         sysDictDataList.forEach(sysDictData -> {
             dictDataMap.put(sysDictData.getDictValue(),sysDictData.getDictLabel());
         });
@@ -107,7 +111,51 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
         //数据处理
         List<SubsidyAnalysisDto> subsidyAnalysisDto = this.baseMapper.selSubsidyAnalysis(dto);
 
-
-
+        EasyExcel.write(outputStream)
+                // 这里放入动态头
+                .head(head(sysDictDataList))
+                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                .sheet("sheet1")
+                .doWrite(dataParse(subsidyAnalysisDto,dictDataMap));
     }
+
+    // 数据转换
+    private List<List<String>> dataParse(List<SubsidyAnalysisDto> dataList,Map<String,String> dictDataMap){
+        List<List<String>> contentList = Lists.newArrayList();
+
+        for(SubsidyAnalysisDto data:dataList){
+            List<String> dataFormat=new ArrayList<>(Arrays.asList(data.getUserName(), data.getCardId(),data.getSubsidyDate()));
+            for(String key:dictDataMap.keySet()){
+                dataFormat.add(this.getDictLabel(data,key).toString());
+            }
+            contentList.add(dataFormat);
+        }
+        return contentList;
+    }
+
+    private BigDecimal getDictLabel(SubsidyAnalysisDto data,String dictType){
+        for (SubsidyDto dto:data.getSubsidyList()){
+            if(dto.getSubsidyType().equals(dictType)){
+                return dto.getMoney();
+            }
+        }
+        return new BigDecimal(0);
+    }
+
+
+    //获取头部
+    private static List <List<String>> head(List<SysDictData> sysDictDataList){
+        List<List<String>> headTitles = Lists.newArrayList();
+        headTitles.add(Arrays.asList("姓名"));
+        headTitles.add(Arrays.asList("身份证号"));
+        headTitles.add(Arrays.asList("日期"));
+
+
+        for(SysDictData sysDictData:sysDictDataList){
+            headTitles.add(Arrays.asList(sysDictData.getDictLabel()));
+        }
+
+        return headTitles;
+    }
+
 }

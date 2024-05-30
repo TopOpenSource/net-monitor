@@ -7,6 +7,7 @@ import com.ruoyi.poor.dto.SubsidyAllYearDto;
 import com.ruoyi.poor.dto.SubsidyAnalysisDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -36,5 +37,5 @@ public interface SubsidyService extends IService<Subsidy> {
      * 统计分析-导出
      * @param dto
      */
-    void analysisExport(SubsidyDto dto);
+    void analysisExport(SubsidyDto dto, OutputStream outputStream);
 }

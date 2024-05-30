@@ -117,7 +117,7 @@ export default {
         return money
     },
     handleExport(){
-
+      this.download('poor/subsidy/analysisExport',this.queryParams,"人员清单.xlsx")
     }
   }
 }
