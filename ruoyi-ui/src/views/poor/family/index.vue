@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="户编号" prop="cardId">
+        <el-input v-model="queryParams.familyNo" clearable @keyup.enter.native="handleQuery"/>
+      </el-form-item>
       <el-form-item label="身份证号" prop="cardId">
         <el-input v-model="queryParams.masterCardId" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>

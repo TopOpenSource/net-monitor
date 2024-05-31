@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="masterCardId != null  and masterCardId != ''"> and t1.master_card_id like concat('%', #{masterCardId}, '%')</if>
             <if test="masterName != null  and masterName != ''"> and t2.name like concat('%', #{masterName}, '%')</if>
+            <if test="familyNo != null  and familyNo != ''"> and t1.family_no like concat('%', #{familyNo}, '%')</if>
         </where>
     </select>
 

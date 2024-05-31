@@ -24,6 +24,9 @@ public class FamilyUser extends BaseEntity {
     @TableField("family_id")
     private Long familyId;
 
+    @TableField("family_no")
+    private String familyNo;
+
     /**
      * 身份证号
      */

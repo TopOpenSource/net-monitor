@@ -13,7 +13,7 @@
               <span>{{ userInfo.name }}</span>
               <dict-tag :options="dict.type.relation_type" :value="userInfo.relationType" style="float: left;margin-right: 10px"/>
 
-              <el-button @click="handleDel(userInfo.cardId)" type="danger" icon="el-icon-delete" circle
+              <el-button v-if="userInfo.relationType!='0'"  @click="handleDel(userInfo.cardId)" type="danger" icon="el-icon-delete" circle
                          style="float: right;margin-left: 5px" size="mini" plain></el-button>
               <el-button @click="handleView(userInfo)" type="success" icon="el-icon-search" circle
                          style="float: right;margin-left: 5px" size="mini" plain></el-button>
@@ -199,15 +199,6 @@ export default {
         this.getFamliy();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
-
-      /*this.$modal.confirm('是否确认删除？').then(function () {
-        return delMember({familyId:this.familyId,cardId:cardId});
-      }).then(() => {
-        this.getFamliy();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-
-      });*/
     },
     submitForm() {
       this.$refs["memForm"].validate(valid => {
@@ -222,7 +213,7 @@ export default {
       });
     },
     cancel() {
-
+      this.memDialog.open=false
     }
   }
 };

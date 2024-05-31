@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.poor.domain.Family;
 import com.ruoyi.poor.domain.FamilyUser;
+import com.ruoyi.poor.domain.User;
 import com.ruoyi.poor.dto.FamilyDto;
+import com.ruoyi.poor.dto.FamilyImportDto;
 import com.ruoyi.poor.dto.FamilyUserDto;
 import com.ruoyi.poor.mapper.FamilyMapper;
 import com.ruoyi.poor.service.FamilyService;
@@ -69,6 +71,7 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
         FamilyUser master = new FamilyUser();
         master.setId(IdUtil.getSnowflakeNextId());
         master.setFamilyId(familyId);
+        master.setFamilyNo(family.getFamilyNo());
         master.setCardId(dto.getMasterCardId());
         master.setRelationType("0");
         familyUserService.save(master);
@@ -78,37 +81,53 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void importData(MultipartFile file) throws IOException {
-        List<FamilyUserDto> dataList = EasyExcel.read(file.getInputStream()).head(FamilyUserDto.class).headRowNumber(1).sheet(0).doReadSync();
+        List<FamilyImportDto> dataList = EasyExcel.read(file.getInputStream()).head(FamilyImportDto.class).headRowNumber(1).sheet(0).doReadSync();
 
-        for (FamilyUserDto familyDto : dataList) {
-            if(StringUtils.isNotEmpty(familyDto.getMasterCardId()) && StringUtils.isNotEmpty(familyDto.getCardId())){
+        for (FamilyImportDto familyDto : dataList) {
+            if(StringUtils.isNotEmpty(familyDto.getFamilyNo()) && StringUtils.isNotEmpty(familyDto.getCardId())){
                 //户主身份证号
-                String masterCardId = familyDto.getMasterCardId();
-
-                QueryWrapper<Family> familyQueryWrapper = new QueryWrapper<>();
-                familyQueryWrapper.select("id");
-                familyQueryWrapper.eq("master_card_id", masterCardId);
-                Family family = this.baseMapper.selectOne(familyQueryWrapper);
+                String familyNo = familyDto.getFamilyNo();
 
                 //新增家庭
+                QueryWrapper<Family> familyQueryWrapper = new QueryWrapper<>();
+                familyQueryWrapper.select("id");
+                familyQueryWrapper.eq("family_no", familyNo);
+                Family family = this.baseMapper.selectOne(familyQueryWrapper);
+
                 if (family == null) {
                     family = new Family();
                     family.setId(IdUtil.getSnowflakeNextId());
-                    family.setMasterCardId(masterCardId);
-                    this.saveOrUpdate(family);
+                    family.setFamilyNo(familyNo);
+                }
+                family.setVillage(familyDto.getVillage());
+                //户主
+                if(familyDto.getRelationType().equals("0")){
+                    family.setMasterCardId(familyDto.getCardId());
+                }
+                this.saveOrUpdate(family);
 
-                    //插入户主
-                    FamilyUser master = new FamilyUser();
-                    master.setId(IdUtil.getSnowflakeNextId());
-                    master.setFamilyId(family.getId());
-                    master.setCardId(masterCardId);
-                    master.setRelationType("0");
-                    familyUserService.save(master);
+
+                //插入关联关系
+                FamilyUserDto  familyUserDto = new FamilyUserDto();
+                familyUserDto.setFamilyId(family.getId());
+                familyUserDto.setFamilyNo(familyDto.getFamilyNo());
+                familyUserDto.setCardId(familyDto.getCardId());
+                familyUserDto.setRelationType(familyDto.getRelationType());
+                familyUserService.saveOrUpdateFamilyUser(familyUserDto);
+
+                //若用户信息为空则 插入用户信息
+                QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("card_id", familyDto.getCardId());
+                long count = userService.count(queryWrapper);
+                if (count < 1) {
+                   User user=new User();
+                   user.setCardId(familyDto.getCardId());
+                   user.setId(IdUtil.getSnowflakeNextId());
+                   user.setName(familyDto.getName());
+                   user.setDisability("0");
+                   userService.saveOrUpdateUser(user);
                 }
 
-                //新增或保存
-                familyDto.setFamilyId(family.getId());
-                familyUserService.saveOrUpdateFamilyUser(familyDto);
             }
         }
 

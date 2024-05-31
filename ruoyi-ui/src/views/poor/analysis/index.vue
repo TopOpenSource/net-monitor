@@ -52,12 +52,19 @@
     </el-row>
 
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="userName" label="姓名" width="120"></el-table-column>
-      <el-table-column prop="cardId" label="身份证号" width="200"></el-table-column>
+      <el-table-column prop="familyNo" label="户编号" width="150"></el-table-column>
+      <el-table-column prop="userName" label="姓名" width="100"></el-table-column>
+      <el-table-column prop="cardId" label="身份证号" width="180"></el-table-column>
+      <el-table-column prop="relationType" label="与户主关系" width="100">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.relation_type" :value="scope.row.relationType"/>
+        </template>
+      </el-table-column>
+
       <el-table-column  prop="subsidyDate" label="日期" width="150"></el-table-column>
 
       <template  v-for="item in dict.type.subsidy_type">
-        <el-table-column  :label="item.label" width="120">
+        <el-table-column  :label="item.label" width="60">
            <template slot-scope="scope">
              {{formatTypeValue(scope.row,item.value)}}
            </template>
@@ -72,7 +79,7 @@ import {selSubsidyAnalysis} from "../../../api/poor/subsidy";
 
 export default {
   name: "AnalysisIndex",
-  dicts: ['subsidy_type'],
+  dicts: ['subsidy_type','relation_type'],
   data() {
     return {
       loading:false,

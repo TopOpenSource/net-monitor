@@ -23,6 +23,8 @@ public class FamilyUserDto {
     //户号
     private Long familyId;
 
+    private String familyNo;
+
     //成员编号
     @ExcelProperty(value = "家庭成员身份证号",converter = StringStringConverter.class)
     private String cardId;
@@ -34,6 +36,7 @@ public class FamilyUserDto {
     public FamilyUser parseToFamliyUser(){
         FamilyUser familyUser = new FamilyUser();
         familyUser.setFamilyId(this.familyId);
+        familyUser.setFamilyNo(this.familyNo);
         familyUser.setCardId(this.cardId);
         familyUser.setRelationType(this.relationType);
         familyUser.setId(IdUtil.getSnowflakeNextId());

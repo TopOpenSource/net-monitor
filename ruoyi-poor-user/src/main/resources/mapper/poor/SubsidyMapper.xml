@@ -22,6 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap id="SubsidyAnalysisDtoMap" type="com.ruoyi.poor.dto.SubsidyAnalysisDto">
           <result column="card_id" property="cardId"></result>
+          <result column="family_no" property="familyNo"></result>
+          <result column="relation_type" property="relationType"></result>
           <result column="id" property="userId"></result>
           <result column="name" property="userName"></result>
           <result column="subsidy_date" property="subsidyDate"></result>
@@ -33,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     <select id="selSubsidyAnalysis" parameterType="com.ruoyi.poor.dto.SubsidyDto"  resultMap="SubsidyAnalysisDtoMap">
         select
-            t1.card_id,
+            t3.family_no,t3.relation_type,t1.card_id,
             <if test="unit==0">
                 DATE_FORMAT(t1.subsidy_date,'%Y-%m') as subsidy_date,
             </if>
@@ -44,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             t1.subsidy_type,SUM(t1.money) as money,t2.id,t2.`name`
         from poor_subsidy t1
         left join poor_user t2 on t1.card_id=t2.card_id
+        LEFT JOIN poor_family_user t3 on t1.card_id=t3.card_id
         <where>
               t2.card_id is not null
             <if test="cardId != null  and cardId != ''">
@@ -58,12 +61,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         <if test="unit==0">
-            group by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
-            order by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
+            group by t3.family_no,t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
+            order by t3.family_no,t3.relation_type,t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
         </if>
         <if test="unit==1">
-            group by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y'),t1.subsidy_type
-            order by t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y'),t1.subsidy_type
+            group by t3.family_no,t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y'),t1.subsidy_type
+            order by t3.family_no,t3.relation_type,t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y'),t1.subsidy_type
         </if>
 
     </select>

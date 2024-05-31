@@ -101,11 +101,17 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
 
     @Override
     public void analysisExport(SubsidyDto dto, OutputStream outputStream) {
-        //读取字典
+        //读取字典--补贴类型
         Map<String,String> dictDataMap=new LinkedHashMap<>();
         List<SysDictData> sysDictDataList = dictTypeService.selectDictDataByType("subsidy_type");
         sysDictDataList.forEach(sysDictData -> {
             dictDataMap.put(sysDictData.getDictValue(),sysDictData.getDictLabel());
+        });
+        //与户主关系
+        Map<String,String> relationTypeMap=new LinkedHashMap<>();
+        List<SysDictData> relationTypeList = dictTypeService.selectDictDataByType("relation_type");
+        relationTypeList.forEach(sysDictData -> {
+            relationTypeMap.put(sysDictData.getDictValue(),sysDictData.getDictLabel());
         });
 
         //数据处理
@@ -116,15 +122,15 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
                 .head(head(sysDictDataList))
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .sheet("sheet1")
-                .doWrite(dataParse(subsidyAnalysisDto,dictDataMap));
+                .doWrite(dataParse(subsidyAnalysisDto,dictDataMap,relationTypeMap));
     }
 
     // 数据转换
-    private List<List<String>> dataParse(List<SubsidyAnalysisDto> dataList,Map<String,String> dictDataMap){
+    private List<List<String>> dataParse(List<SubsidyAnalysisDto> dataList,Map<String,String> dictDataMap,Map<String,String> relationTypeMap){
         List<List<String>> contentList = Lists.newArrayList();
 
         for(SubsidyAnalysisDto data:dataList){
-            List<String> dataFormat=new ArrayList<>(Arrays.asList(data.getUserName(), data.getCardId(),data.getSubsidyDate()));
+            List<String> dataFormat=new ArrayList<>(Arrays.asList(data.getFamilyNo(),data.getUserName(), data.getCardId(),relationTypeMap.get(data.getRelationType()),data.getSubsidyDate()));
             for(String key:dictDataMap.keySet()){
                 dataFormat.add(this.getDictLabel(data,key).toString());
             }
@@ -146,8 +152,10 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     //获取头部
     private static List <List<String>> head(List<SysDictData> sysDictDataList){
         List<List<String>> headTitles = Lists.newArrayList();
+        headTitles.add(Arrays.asList("户编号"));
         headTitles.add(Arrays.asList("姓名"));
         headTitles.add(Arrays.asList("身份证号"));
+        headTitles.add(Arrays.asList("与户主关系"));
         headTitles.add(Arrays.asList("日期"));
 
 

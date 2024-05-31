@@ -12,6 +12,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubsidyAnalysisDto {
+    private String familyNo;
+    private String relationType;
     private String subsidyDate;
     private String userName;
     private String userId;
