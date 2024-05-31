@@ -16,5 +16,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       <where>
           t1.family_id=#{familyId}
       </where>
+         order by t1.relation_type
   </select>
 </mapper>

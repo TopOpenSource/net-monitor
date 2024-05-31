@@ -84,11 +84,6 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
             if(StringUtils.isNotEmpty(familyDto.getMasterCardId()) && StringUtils.isNotEmpty(familyDto.getCardId())){
                 //户主身份证号
                 String masterCardId = familyDto.getMasterCardId();
-                //成员身份证号
-                String cardId = familyDto.getCardId();
-                //与户主关系
-                String relationType = familyDto.getRelationType();
-
 
                 QueryWrapper<Family> familyQueryWrapper = new QueryWrapper<>();
                 familyQueryWrapper.select("id");
@@ -101,6 +96,14 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
                     family.setId(IdUtil.getSnowflakeNextId());
                     family.setMasterCardId(masterCardId);
                     this.saveOrUpdate(family);
+
+                    //插入户主
+                    FamilyUser master = new FamilyUser();
+                    master.setId(IdUtil.getSnowflakeNextId());
+                    master.setFamilyId(family.getId());
+                    master.setCardId(masterCardId);
+                    master.setRelationType("0");
+                    familyUserService.save(master);
                 }
 
                 //新增或保存

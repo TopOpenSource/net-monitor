@@ -22,7 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectFamilyList" parameterType="com.ruoyi.poor.dto.FamilyDto" resultMap="FamilyDtoMap">
         SELECT
-        t1.id, t1.master_card_id, t2.id as master_id, t2.NAME, t2.phone, t1.family_no,t1.address, t1.village,t1.family_count
+        t1.id, t1.master_card_id, t2.id as master_id, t2.NAME, t2.phone, t1.family_no,t1.address, t1.village,
+        (select count(*) from poor_family_user tt1 where tt1.family_id=t1.id) as family_count
         FROM
         poor_family t1
         LEFT JOIN poor_user t2 ON t1.master_card_id = t2.card_id
