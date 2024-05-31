@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+
       <el-form-item label="身份证号" prop="cardId">
         <el-input
           v-model="queryParams.cardId"
@@ -18,6 +19,10 @@
             :value="dict.value"
           />
         </el-select>
+      </el-form-item>
+
+      <el-form-item label="无绑定" prop="noName">
+        <el-checkbox v-model="queryParams.noName" :true-label="1" :false-label="0"></el-checkbox>
       </el-form-item>
 
       <el-form-item label="文件来源" prop="fileId">
@@ -41,6 +46,7 @@
 
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete">删除</el-button>
+        <el-button type="info" plain icon="el-icon-delete" size="mini"  @click="handleDelNoBind">删除无绑定数据</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -52,7 +58,7 @@
       </el-table-column>
       <el-table-column label="身份证号" width="200" align="center" prop="cardId"/>
       <el-table-column label="金额"  align="center" prop="money" width="80"/>
-      <el-table-column label="补贴类型" align="center"  prop="subsidyType" width="100">
+      <el-table-column label="补贴类型" align="center"  prop="subsidyType" width="150">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.subsidy_type" :value="scope.row.subsidyType"/>
         </template>
@@ -206,7 +212,6 @@ export default {
 
     /** 删除按钮操作 */
     handleDelete(row) {
-      console.log(this.ids)
       const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除？').then(function () {
         return del(ids);
@@ -217,6 +222,15 @@ export default {
       });
     },
 
+    handleDelNoBind(){
+      this.$modal.confirm('是否确认删除？').then(function () {
+        return delNoBind();
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {
+      });
+    },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs["form"].validate(valid => {

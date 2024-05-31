@@ -26,6 +26,8 @@ public class SubsidyDto {
     private Integer year;
     private BigDecimal money;
 
+
+
     private List<BigDecimal> moneyDataList;
 
     private Integer minYear;
@@ -55,4 +57,9 @@ public class SubsidyDto {
     private Integer unit;
     @JsonFormat(pattern = "yyyy-MM")
     private List<Date> dateRange;
+
+    /**
+     * 无绑定，查询出没有绑定人员的数据
+     */
+    private Integer noName;
 }

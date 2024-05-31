@@ -118,8 +118,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        cardId: undefined,
-        name: undefined,
       },
       // 表单参数
       form: {},
@@ -153,7 +151,7 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
-      list().then(response => {
+      list(this.queryParams).then(response => {
         this.tableData = response.rows
         this.total = response.total
         this.loading = false

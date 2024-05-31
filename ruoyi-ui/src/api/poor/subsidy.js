@@ -48,6 +48,13 @@ export function del(ids) {
   })
 }
 
+export function delNoBind(){
+  return request({
+    url: '/poor/subsidy/delNoBind',
+    method: 'delete'
+  })
+}
+
 export function update(data) {
   return request({
     url: '/poor/subsidy/update',

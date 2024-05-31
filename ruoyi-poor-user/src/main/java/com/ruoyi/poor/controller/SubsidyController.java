@@ -108,6 +108,14 @@ public class SubsidyController extends BaseController {
         return AjaxResult.success(0);
     }
 
+
+    @DeleteMapping("delNoBind")
+    public AjaxResult delNoBind() {
+        subsidyService.delNoBind();
+        return AjaxResult.success(0);
+    }
+
+
     /**
      * 更新
      *

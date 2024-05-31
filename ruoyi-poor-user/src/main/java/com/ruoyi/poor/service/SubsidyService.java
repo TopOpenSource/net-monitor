@@ -38,4 +38,10 @@ public interface SubsidyService extends IService<Subsidy> {
      * @param dto
      */
     void analysisExport(SubsidyDto dto, OutputStream outputStream);
+
+
+    /**
+     * 删除未绑定的数据
+     */
+    void delNoBind();
 }

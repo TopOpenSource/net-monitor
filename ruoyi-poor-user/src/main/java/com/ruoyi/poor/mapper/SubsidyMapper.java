@@ -53,4 +53,6 @@ public interface SubsidyMapper extends BaseMapper<Subsidy> {
     List<SubsidyDto> selSubsidyList(SubsidyDto dto);
 
     List<SubsidyAnalysisDto> selSubsidyAnalysis(SubsidyDto dto);
+
+    void delNoBind();
 }

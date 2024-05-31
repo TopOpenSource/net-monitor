@@ -15,6 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subsidyType != null  and subsidyType != ''">and t1.subsidy_type = #{subsidyType}</if>
             <if test="year != null">and YEAR(t1.subsidy_date) = #{year}</if>
             <if test="fileId != null">and t1.data_file_id =#{fileId}</if>
+            <if test="noName != null and noName ==1 ">and t2.id is null </if>
         </where>
 
     </select>
@@ -70,4 +71,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
 
     </select>
+
+    <delete id="delNoBind">
+        delete t1
+        FROM
+            poor_subsidy t1
+            LEFT JOIN poor_user t2 ON t1.card_id = t2.card_id
+        WHERE
+            t2.id IS NULL
+    </delete>
 </mapper>
