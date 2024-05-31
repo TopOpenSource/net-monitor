@@ -104,8 +104,7 @@
 
 import {list, saveOrUpdate, del, getInfo} from "@/api/poor/family";
 import {listAll} from "@/api/poor/user";
-import {parseTime} from "@/utils/ruoyi";
-import ExcelFileUpload from "@/views/poor/user/ExcelFileUpload.vue";
+import ExcelFileUpload from "@/views/poor/family/ExcelFileUpload.vue";
 
 export default {
   name: "PoorFamily",

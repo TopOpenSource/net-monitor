@@ -23,7 +23,7 @@ import com.ruoyi.system.service.ISysDictTypeService;
  * 
  * @author ruoyi
  */
-@Service
+@Service("sysDictTypeService")
 public class SysDictTypeServiceImpl implements ISysDictTypeService
 {
     @Autowired

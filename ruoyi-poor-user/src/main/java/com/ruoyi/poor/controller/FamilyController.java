@@ -13,7 +13,9 @@ import com.ruoyi.poor.service.FamilyService;
 import com.ruoyi.poor.service.FamilyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -65,6 +67,20 @@ public class FamilyController extends BaseController {
     public AjaxResult delMember(@RequestBody FamilyUserDto dto) {
         familyUserService.deleteFamilyUser(dto);
         return AjaxResult.success(0);
+    }
+
+
+    /**
+     * 导入家庭
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("importFile")
+    public AjaxResult importFile(MultipartFile file) throws IOException {
+        familyService.importData(file);
+        return AjaxResult.success();
     }
 
 }
