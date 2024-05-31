@@ -25,10 +25,6 @@ public class User extends BaseEntity {
     @TableId
     private Long id;
 
-    @JsonSerialize(using = ToStringSerializer.class)
-    @TableField("family_id")
-    private Long familyId;
-
     @ExcelProperty(value = "身份证号",converter = StringStringConverter.class)
     @TableField("card_id")
     private String cardId;

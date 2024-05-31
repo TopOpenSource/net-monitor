@@ -18,4 +18,6 @@ public interface FamilyService extends IService<Family> {
     void saveOrUpdateFamily(FamilyDto dto);
 
     void importData(MultipartFile file) throws IOException;
+
+    void removeByFamilyId(Long familyId);
 }

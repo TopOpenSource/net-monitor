@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.poor.domain.Family;
+import com.ruoyi.poor.domain.FamilyUser;
 import com.ruoyi.poor.domain.User;
 import com.ruoyi.poor.dto.FamilyDto;
 import com.ruoyi.poor.mapper.FamilyMapper;
 import com.ruoyi.poor.service.FamilyService;
+import com.ruoyi.poor.service.FamilyUserService;
 import com.ruoyi.poor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +28,12 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FamilyUserService familyUserService;
+
     @Override
     public FamilyDto selectFamilyById(Long id) {
-        FamilyDto dto=this.baseMapper.selectFamilyById(id);
-        dto.setCardIds(this.baseMapper.selectFamilys(dto.getMasterCardId(),id));
+        FamilyDto dto = this.baseMapper.selectFamilyById(id);
         return dto;
     }
 
@@ -41,28 +45,34 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveOrUpdateFamily(FamilyDto dto) {
-        Long familyId=dto.getId();
+        Long familyId = dto.getId();
+        if (dto.getId() == null) {
+            familyId = IdUtil.getSnowflakeNextId();
 
-        Family family = new Family();
-        if(dto.getId()==null){
-            familyId=IdUtil.getSnowflakeNextId();
-            family.setId(familyId);
         }
 
-        //设置user外键
-        List<String> cardIds = dto.getCardIds();
-        cardIds.add(dto.getMasterCardId());
-
-        UpdateWrapper<User> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.set("family_id",familyId);
-        updateWrapper.in("card_id",cardIds);
-        userService.update(updateWrapper);
-
+        Family family = new Family();
+        family.setId(familyId);
+        family.setFamilyNo(dto.getFamilyNo());
         family.setMasterCardId(dto.getMasterCardId());
         family.setAddress(dto.getAddress());
         family.setVillage(dto.getVillage());
-        family.setFamilyCount(cardIds.size());
         this.saveOrUpdate(family);
+
+
+        //删除原户主
+        QueryWrapper<FamilyUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("family_id", familyId);
+        queryWrapper.eq("relation_type", "0");
+        familyUserService.remove(queryWrapper);
+
+        //插入户主
+        FamilyUser master = new FamilyUser();
+        master.setId(IdUtil.getSnowflakeNextId());
+        master.setFamilyId(familyId);
+        master.setCardId(dto.getMasterCardId());
+        master.setRelationType("0");
+        familyUserService.save(master);
     }
 
 
@@ -77,24 +87,36 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
             //成员身份证号
             String cardId = familyDto.getCardId();
 
-            QueryWrapper<Family> familyQueryWrapper=new QueryWrapper<>();
+            QueryWrapper<Family> familyQueryWrapper = new QueryWrapper<>();
             familyQueryWrapper.select("id");
-            familyQueryWrapper.eq("master_card_id",masterCardId);
+            familyQueryWrapper.eq("master_card_id", masterCardId);
             Family family = this.baseMapper.selectOne(familyQueryWrapper);
 
             //新增家庭
-            if(family==null){
-                family=new Family();
+            if (family == null) {
+                family = new Family();
                 family.setId(IdUtil.getSnowflakeNextId());
                 family.setMasterCardId(masterCardId);
                 this.saveOrUpdate(family);
             }
 
-            UpdateWrapper<User> updateWrapper=new UpdateWrapper<>();
-            updateWrapper.set("family_id",family.getId());
-            updateWrapper.eq("card_id",cardId);
+            UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.set("family_id", family.getId());
+            updateWrapper.eq("card_id", cardId);
             userService.update(updateWrapper);
         }
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeByFamilyId(Long familyId) {
+        //删除家庭
+        this.removeById(familyId);
+
+        //删除家庭成员
+        QueryWrapper<FamilyUser> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("family_id", familyId);
+        familyUserService.remove(userQueryWrapper);
     }
 }

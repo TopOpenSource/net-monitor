@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.poor.mapper.FamilyUserMapper">
+
+
+
+  <select id="selectFamilyUserList" resultType="com.ruoyi.poor.dto.UserDto">
+      SELECT
+          t1.relation_type,
+          t2.*
+      FROM
+          poor_family_user t1
+              LEFT JOIN poor_user t2 ON t1.card_id = t2.card_id
+      <where>
+          t1.family_id=#{familyId}
+      </where>
+  </select>
+</mapper>

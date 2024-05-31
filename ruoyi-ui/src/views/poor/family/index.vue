@@ -26,6 +26,7 @@
     </el-row>
 
     <el-table v-loading="loading" :data="familyList" @selection-change="handleSelectionChange">
+      <el-table-column label="户编号" width="150" align="center" prop="familyNo"/>
       <el-table-column label="户主" width="200" align="center" prop="name">
         <template slot-scope="scope">
           <span @click="handleView(scope.row)" style="cursor: pointer;color: #409eff">{{ scope.row.master.name }}</span>
@@ -55,6 +56,11 @@
 
     <el-dialog :title="title" :visible.sync="open" width="800px" :close-on-click-modal="false" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+
+        <el-form-item label="户编号" prop="familyNo">
+          <el-input v-model="form.familyNo"/>
+        </el-form-item>
+
         <el-form-item label="户主" prop="masterCardId">
           <el-select v-model="form.masterCardId" placeholder="请选择" filterable  clearable>
             <el-option
@@ -62,19 +68,6 @@
               :key="item.cardId"
               :label="item.name"
               :value="item.cardId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="家庭成员" prop="cardIds">
-          <el-select v-model="form.cardIds" placeholder="请选择" multiple filterable  clearable>
-            <el-option
-              v-for="item in userList"
-              :key="item.cardId"
-              :label="item.name"
-              :value="item.cardId"
-              :disabled="item.cardId==form.masterCardId"
-            >
             </el-option>
           </el-select>
         </el-form-item>
@@ -158,7 +151,7 @@ export default {
         masterCardId: [
           {required: true, message: "不能为空", trigger: "blur"}
         ],
-        cardIds: [
+        familyNo: [
           {required: true, message: "不能为空", trigger: "blur"}
         ],
         village: [
@@ -201,7 +194,7 @@ export default {
       this.form = {
         id: null,
         masterCardId:null,
-        cardIds:null,
+        familyNo:null,
         address:null,
         village:null,
       };

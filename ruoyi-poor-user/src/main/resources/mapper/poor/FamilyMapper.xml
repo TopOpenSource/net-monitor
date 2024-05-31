@@ -10,6 +10,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result column="village" property="village" />
         <result column="address" property="address" />
         <result column="family_count" property="familyCount" />
+        <result column="family_no" property="familyNo" />
+
         <association property="master" javaType="com.ruoyi.poor.domain.User">
             <id column="master_id" property="id" />
             <result column="master_card_id" property="cardId" />
@@ -20,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectFamilyList" parameterType="com.ruoyi.poor.dto.FamilyDto" resultMap="FamilyDtoMap">
         SELECT
-        t1.id, t1.master_card_id, t2.id as master_id, t2.NAME, t2.phone, t1.address, t1.village,t1.family_count
+        t1.id, t1.master_card_id, t2.id as master_id, t2.NAME, t2.phone, t1.family_no,t1.address, t1.village,t1.family_count
         FROM
         poor_family t1
         LEFT JOIN poor_user t2 ON t1.master_card_id = t2.card_id
@@ -32,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectFamilyById"  resultMap="FamilyDtoMap">
         SELECT
-        t1.id, t1.master_card_id, t2.id as master_id, t2.NAME, t2.phone, t1.address, t1.village,t1.family_count
+        t1.id, t1.master_card_id, t2.id as master_id, t2.NAME, t2.phone, t1.family_no, t1.address, t1.village,t1.family_count
         FROM
         poor_family t1
         LEFT JOIN poor_user t2 ON t1.master_card_id = t2.card_id
@@ -41,14 +43,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectFamilys"  resultType="String">
-        SELECT
-        t1.card_id
-        FROM poor_user t1
-        <where>
-            t1.family_id=#{familyId}
-        and t1.card_id != #{masterCardId}
-        </where>
-    </select>
 
 </mapper>

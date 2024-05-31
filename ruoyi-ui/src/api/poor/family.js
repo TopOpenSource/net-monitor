@@ -35,3 +35,21 @@ export function del(id) {
     method: 'delete',
   })
 }
+
+//添加家庭成员
+export function addMember(data) {
+  return request({
+    url: '/poor/family/addMember',
+    method: 'post',
+    data: data
+  })
+}
+
+//删除家庭成员
+export function delMember(data) {
+  return request({
+    url: '/poor/family/delMember',
+    method: 'post',
+    data: data
+  })
+}

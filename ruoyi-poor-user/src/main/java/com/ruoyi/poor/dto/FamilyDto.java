@@ -25,14 +25,14 @@ public class FamilyDto{
     @ExcelProperty(value = "户主身份证号",converter = StringStringConverter.class)
     private String masterCardId;
 
+    //户号
+    private String familyNo;
+
     private User master;
 
     private String address;
 
-    /**
-     * 成员 cardIds
-     */
-    private List<String> cardIds;
+
 
     /**
      * 村庄

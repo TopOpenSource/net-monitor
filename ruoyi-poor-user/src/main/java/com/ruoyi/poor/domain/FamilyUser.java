@@ -14,38 +14,26 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("poor_family")
-public class Family extends BaseEntity {
+@TableName("poor_family_user")
+public class FamilyUser extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @TableId
     private Long id;
 
-    /**
-     * 户号
-     */
-    @TableField("family_no")
-    private String familyNo;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @TableField("family_id")
+    private Long familyId;
 
     /**
-     * 户主
+     * 身份证号
      */
-    @TableField("master_card_id")
-    private String masterCardId;
-
-    @ExcelProperty(value = "地址")
-    @TableField("address")
-    private String address;
+    @TableField("card_id")
+    private String cardId;
 
     /**
-     * 村庄
+     * 户主关系
      */
-    @ExcelProperty(value = "村庄")
-    @TableField("village")
-    private String village;
+    @TableField("relation_type")
+    private String relationType;
 
-    /**
-     * 家人数量
-     */
-    @TableField("family_count")
-    private Integer familyCount;
 }

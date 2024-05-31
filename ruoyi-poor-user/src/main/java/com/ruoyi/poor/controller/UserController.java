@@ -7,6 +7,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.poor.domain.DataFile;
 import com.ruoyi.poor.domain.User;
+import com.ruoyi.poor.dto.UserDto;
+import com.ruoyi.poor.service.FamilyUserService;
 import com.ruoyi.poor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,8 @@ import java.util.List;
 public class UserController extends BaseController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private FamilyUserService familyUserService;
 
     @GetMapping("info/{id}")
     public User list(@PathVariable("id") Long id) {
@@ -97,9 +100,7 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping("/listFamily/{id}")
-    public List<User> listFamily(@PathVariable("id") Long familyId) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("family_id",familyId);
-        return userService.list(queryWrapper);
+    public List<UserDto> listFamily(@PathVariable("id") Long familyId) {
+        return familyUserService.selectFamilyUserList(familyId);
     }
 }
