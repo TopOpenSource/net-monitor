@@ -61,6 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               and (t1.subsidy_date <![CDATA[ >= ]]>  #{dateRange[0]} and t1.subsidy_date <![CDATA[ <= ]]>  #{dateRange[1]})
             </if>
         </where>
+        <if test="unit==-1">
+            group by t3.family_no,t1.card_id,t1.subsidy_type
+            order by t3.family_no,t3.relation_type,t1.card_id,t1.subsidy_type
+        </if>
         <if test="unit==0">
             group by t3.family_no,t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type
             order by t3.family_no,t3.relation_type,t1.card_id, DATE_FORMAT(t1.subsidy_date,'%Y-%m'),t1.subsidy_type

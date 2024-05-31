@@ -3,6 +3,7 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="统计单位" prop="unit">
         <el-radio-group v-model="queryParams.unit" size="mini">
+          <el-radio :label="-1" border>全部</el-radio>
           <el-radio :label="0" border>月</el-radio>
           <el-radio :label="1" border>年</el-radio>
         </el-radio-group>
@@ -52,6 +53,11 @@
     </el-row>
 
     <el-table :data="tableData" border style="width: 100%">
+      <el-table-column prop="familyNo" label="序号" width="80">
+        <template slot-scope="scope">
+          {{ scope.$index + 1}}
+        </template>
+      </el-table-column>
       <el-table-column prop="familyNo" label="户编号" width="150"></el-table-column>
       <el-table-column prop="userName" label="姓名" width="100"></el-table-column>
       <el-table-column prop="cardId" label="身份证号" width="180"></el-table-column>

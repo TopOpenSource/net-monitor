@@ -133,13 +133,14 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     // 数据转换
     private List<List<String>> dataParse(List<SubsidyAnalysisDto> dataList,Map<String,String> dictDataMap,Map<String,String> relationTypeMap){
         List<List<String>> contentList = Lists.newArrayList();
-
+        int i=1;
         for(SubsidyAnalysisDto data:dataList){
-            List<String> dataFormat=new ArrayList<>(Arrays.asList(data.getFamilyNo(),data.getUserName(), data.getCardId(),relationTypeMap.get(data.getRelationType()),data.getSubsidyDate()));
+            List<String> dataFormat=new ArrayList<>(Arrays.asList(String.valueOf(i),data.getFamilyNo(),data.getUserName(), data.getCardId(),relationTypeMap.get(data.getRelationType()),data.getSubsidyDate()));
             for(String key:dictDataMap.keySet()){
                 dataFormat.add(this.getDictLabel(data,key).toString());
             }
             contentList.add(dataFormat);
+            i++;
         }
         return contentList;
     }
@@ -157,6 +158,7 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     //获取头部
     private static List <List<String>> head(List<SysDictData> sysDictDataList){
         List<List<String>> headTitles = Lists.newArrayList();
+        headTitles.add(Arrays.asList("序号"));
         headTitles.add(Arrays.asList("户编号"));
         headTitles.add(Arrays.asList("姓名"));
         headTitles.add(Arrays.asList("身份证号"));
