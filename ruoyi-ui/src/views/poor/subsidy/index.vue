@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="loading">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
 
       <el-form-item label="身份证号" prop="cardId">
@@ -98,7 +98,7 @@
 
 <script>
 
-import {selSubsidyList,del,update,getInfo} from "@/api/poor/subsidy";
+import {selSubsidyList,del,update,getInfo,delNoBind} from "@/api/poor/subsidy";
 import {listAll} from "@/api/poor/dataFile";
 export default {
   name: "PoorUser",
@@ -223,12 +223,20 @@ export default {
     },
 
     handleDelNoBind(){
+      let $this=this
       this.$modal.confirm('是否确认删除？').then(function () {
-        return delNoBind();
+        $this.loading=true
+        delNoBind().then(res=>{
+          $this.loading=false
+
+          $this.getList();
+          $this.$modal.msgSuccess("删除成功");
+        })
+        return ;
       }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
+
       }).catch(() => {
+
       });
     },
     /** 提交按钮 */
