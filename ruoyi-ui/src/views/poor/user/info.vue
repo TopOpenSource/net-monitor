@@ -84,9 +84,9 @@
 
           </el-row>
           <el-tabs v-model="activeTab">
-            <template v-for="item in dict.type.subsidy_type">
+            <template v-for="item in dict.type.subsidy_type" v-if="subsidyTypeCount[item.value] && subsidyTypeCount[item.value]>0">
               <el-tab-pane :label="item.label" :name="item.value">
-                 <subsidy-table :card-id="cardId" :subsidy-type="item.value" :year="currentYear.getFullYear()"></subsidy-table>
+                 <subsidy-table  :card-id="cardId" :subsidy-type="item.value" :year="currentYear.getFullYear()"></subsidy-table>
               </el-tab-pane>
             </template>
           </el-tabs>
@@ -103,7 +103,7 @@
 import subsidyTable from "./subsidyTable.vue";
 import * as echarts from "echarts";
 import {getInfo} from "@/api/poor/user";
-import {selGroupType, selGroupYearType} from "../../../api/poor/subsidy";
+import {selCountBySubsidyType, selGroupType, selGroupYearType} from "../../../api/poor/subsidy";
 import UserEdit from "@/views/poor/user/UserEdit.vue";
 export default {
   name: "Profile",
@@ -122,7 +122,8 @@ export default {
       activeTab:'0',
       tableData:[],
       subsidyType:null,//当年类型统计
-      subsidyYear:null //个人按年统计
+      subsidyYear:null, //个人按年统计
+      subsidyTypeCount:null, //补助类型数量
     };
   },
   created() {
@@ -158,6 +159,13 @@ export default {
         this.userInfo=res
         this.statistics()
         this.statistics2()
+      })
+
+      this.subsidyTypeCount={}
+      selCountBySubsidyType(this.cardId).then(res=>{
+          res.forEach(data=>{
+            this.subsidyTypeCount[data.subsidyType]=data.count
+          })
       })
     },
     //补充subsidy 中文名称

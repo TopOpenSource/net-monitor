@@ -6,6 +6,7 @@ import com.ruoyi.poor.domain.Subsidy;
 import com.ruoyi.poor.dto.SubsidyAnalysisDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -55,4 +56,14 @@ public interface SubsidyMapper extends BaseMapper<Subsidy> {
     List<SubsidyAnalysisDto> selSubsidyAnalysis(SubsidyDto dto);
 
     void delNoBind();
+
+    /**
+     * 查询各项补助的费用
+     * @param cardId
+     * @return
+     */
+    @Select("select t.subsidy_type,count(*) as count from poor_subsidy t " +
+            "where t.card_id=#{cardId} " +
+            "GROUP BY t.subsidy_type ")
+    List<SubsidyDto> selCountBySubsidyType(@Param("cardId") String cardId);
 }

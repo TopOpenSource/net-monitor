@@ -62,4 +62,9 @@ public class SubsidyDto {
      * 无绑定，查询出没有绑定人员的数据
      */
     private Integer noName;
+
+    /**
+     * 数量
+     */
+    private Integer count;
 }

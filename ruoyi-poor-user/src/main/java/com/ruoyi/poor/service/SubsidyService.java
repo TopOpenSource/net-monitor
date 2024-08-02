@@ -44,4 +44,11 @@ public interface SubsidyService extends IService<Subsidy> {
      * 删除未绑定的数据
      */
     void delNoBind();
+
+    /**
+     * 查询各项补助的费用
+     * @param cardId
+     * @return
+     */
+    List<SubsidyDto> selCountBySubsidyType(String cardId);
 }

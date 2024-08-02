@@ -69,3 +69,11 @@ export function getInfo(id) {
     method: 'get',
   })
 }
+
+
+export function selCountBySubsidyType(cardId){
+  return request({
+    url: '/poor/subsidy/selCountBySubsidyType/'+cardId,
+    method: 'get'
+  })
+}

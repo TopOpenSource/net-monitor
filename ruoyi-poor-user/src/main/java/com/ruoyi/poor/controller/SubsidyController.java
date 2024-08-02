@@ -65,6 +65,7 @@ public class SubsidyController extends BaseController {
 
     /**
      * 统计分析
+     *
      * @param dto
      * @return
      */
@@ -77,7 +78,7 @@ public class SubsidyController extends BaseController {
     public void analysisExport(SubsidyDto dto, HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         FileUtils.setAttachmentResponseHeader(response, "统计清单.xlsx");
-        subsidyService.analysisExport(dto,response.getOutputStream());
+        subsidyService.analysisExport(dto, response.getOutputStream());
         //FileUtils.writeBytes(RuoYiConfig.getUploadPath() + path, response.getOutputStream());
     }
 
@@ -131,5 +132,13 @@ public class SubsidyController extends BaseController {
     @GetMapping("info/{id}")
     public Subsidy get(@PathVariable Long id) {
         return subsidyService.getById(id);
+    }
+
+    /**
+     * 查询各项补助的费用
+     */
+    @GetMapping("selCountBySubsidyType/{cardId}")
+    public List<SubsidyDto> selCountBySubsidyType(@PathVariable String cardId) {
+        return subsidyService.selCountBySubsidyType(cardId);
     }
 }

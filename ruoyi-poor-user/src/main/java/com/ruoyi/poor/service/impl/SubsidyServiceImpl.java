@@ -130,6 +130,11 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
       this.baseMapper.delNoBind();
     }
 
+    @Override
+    public List<SubsidyDto> selCountBySubsidyType(String cardId) {
+        return this.baseMapper.selCountBySubsidyType(cardId);
+    }
+
     // 数据转换
     private List<List<String>> dataParse(List<SubsidyAnalysisDto> dataList,Map<String,String> dictDataMap,Map<String,String> relationTypeMap){
         List<List<String>> contentList = Lists.newArrayList();
