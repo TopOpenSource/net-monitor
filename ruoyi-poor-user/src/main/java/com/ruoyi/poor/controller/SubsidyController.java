@@ -49,6 +49,8 @@ public class SubsidyController extends BaseController {
         if (dto.getYear() != null) {
             queryWrapper.eq("YEAR(subsidy_date)", dto.getYear());
         }
+
+        queryWrapper.orderByDesc("subsidy_type","subsidy_date");
         return subsidyService.list(queryWrapper);
     }
 

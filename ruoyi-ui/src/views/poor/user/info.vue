@@ -5,7 +5,8 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>户籍信息</span>
-            <el-button  @click="handleEdit(userInfo)" type="primary" icon="el-icon-edit" circle style="float: right" size="mini"></el-button>
+            <el-button @click="handleEdit(userInfo)" type="primary" icon="el-icon-edit" circle style="float: right"
+                       size="mini"></el-button>
           </div>
           <div>
             <ul class="list-group list-group-striped">
@@ -69,120 +70,114 @@
       <el-col :span="18" :xs="24">
         <el-card>
           <div slot="header" class="clearfix">
-            <span>补助发放统计-{{this.currentYear.getFullYear()}}年</span>
-            <el-date-picker style="float: right" type="year" v-model=" currentYear" placeholder="选择年分"></el-date-picker>
+            <span>补助发放统计</span>
           </div>
-
           <el-row>
-            <el-col :span="12">
-              <div ref="subsidyType" style="height: 250px" />
-            </el-col>
-
-            <el-col :span="12">
-              <div ref="subsidyYear" style="height: 250px" />
-            </el-col>
-
+            <div ref="subsidyYear" style="height: 250px"/>
           </el-row>
-          <el-tabs v-model="activeTab">
-            <template v-for="item in dict.type.subsidy_type" v-if="subsidyTypeCount[item.value] && subsidyTypeCount[item.value]>0">
-              <el-tab-pane :label="item.label" :name="item.value">
-                 <subsidy-table  :card-id="cardId" :subsidy-type="item.value" :year="currentYear.getFullYear()"></subsidy-table>
-              </el-tab-pane>
-            </template>
-          </el-tabs>
+
+        </el-card>
+
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>补助发放明细</span>
+          </div>
+          <el-row>
+            <subsidy-user-table :card-id="cardId"></subsidy-user-table>
+          </el-row>
 
         </el-card>
       </el-col>
     </el-row>
 
-    <UserEdit :form="userInfo" :openView="open" :title="title" @success="handleSaveSuccess" @cancelOpt="handleSaveCancel"></UserEdit>
+    <UserEdit :form="userInfo" :openView="open" :title="title" @success="handleSaveSuccess"
+              @cancelOpt="handleSaveCancel"></UserEdit>
   </div>
 </template>
 
 <script>
-import subsidyTable from "./subsidyTable.vue";
+import subsidyUserTable from "@/views/poor/user/subsidyUserTable.vue";
 import * as echarts from "echarts";
 import {getInfo} from "@/api/poor/user";
 import {selCountBySubsidyType, selGroupType, selGroupYearType} from "../../../api/poor/subsidy";
 import UserEdit from "@/views/poor/user/UserEdit.vue";
+
 export default {
   name: "Profile",
-  dicts: ['yes_no', 'sys_user_sex', 'village','subsidy_type'],
-  components: {UserEdit, subsidyTable},
+  dicts: ['yes_no', 'sys_user_sex', 'village', 'subsidy_type'],
+  components: {UserEdit, subsidyUserTable},
   data() {
     return {
-      title:'信息修改',
-      open:false,
-      userId:undefined,
-      cardId:undefined,
-      userInfo:{
-
-      },
+      title: '信息修改',
+      open: false,
+      userId: undefined,
+      cardId: undefined,
+      userInfo: {},
       currentYear: new Date(),
-      activeTab:'0',
-      tableData:[],
-      subsidyType:null,//当年类型统计
-      subsidyYear:null, //个人按年统计
-      subsidyTypeCount:null, //补助类型数量
+      activeTab: '0',
+      tableData: [],
+      subsidyType: null,//当年类型统计
+      subsidyYear: null, //个人按年统计
+      subsidyTypeCount: null, //补助类型数量
     };
   },
   created() {
-    this.userId=this.$route.params.userId
-    this.cardId=this.$route.params.cardId
+    this.userId = this.$route.params.userId
+    this.cardId = this.$route.params.cardId
     this.initData()
   },
   watch: {
-    currentYear(value,oldValue) {
-      if(value!=oldValue){
+    currentYear(value, oldValue) {
+      if (value != oldValue) {
         this.statistics()
       }
     }
   },
-  mounted(){
+  mounted() {
 
   },
   methods: {
-    handleEdit(userInfo){
-      this.open=true
+    handleEdit(userInfo) {
+      this.open = true
     },
-    handleSaveSuccess(){
-      this.open=false
+    handleSaveSuccess() {
+      this.open = false
       this.$modal.msgSuccess("修改成功");
       this.initData()
     },
-    handleSaveCancel(){
-      this.open=false
+    handleSaveCancel() {
+      this.open = false
     },
-    initData(){
+    initData() {
       //获取用户信息
-      getInfo(this.userId).then(res=>{
-        this.userInfo=res
-        this.statistics()
+      getInfo(this.userId).then(res => {
+        this.userInfo = res
+        //this.statistics()
         this.statistics2()
       })
 
-      this.subsidyTypeCount={}
-      selCountBySubsidyType(this.cardId).then(res=>{
-          res.forEach(data=>{
-            this.subsidyTypeCount[data.subsidyType]=data.count
-          })
+      this.subsidyTypeCount = {}
+      selCountBySubsidyType(this.cardId).then(res => {
+        res.forEach(data => {
+          this.subsidyTypeCount[data.subsidyType] = data.count
+        })
       })
     },
     //补充subsidy 中文名称
-    formartSubsidy(subsidyList){
-      subsidyList.forEach(subsidy=>{
-        subsidy.value=subsidy.money
+    formartSubsidy(subsidyList) {
+      subsidyList.forEach(subsidy => {
+        subsidy.value = subsidy.money
 
         //补充subsidy 中文名称
-        this.dict.type.subsidy_type.forEach(dict=>{
-          if(dict.value==subsidy.subsidyType){
-            subsidy.name=dict.label
+        this.dict.type.subsidy_type.forEach(dict => {
+          if (dict.value == subsidy.subsidyType) {
+            subsidy.name = dict.label
           }
         })
       })
     },
-    statistics(){
-      selGroupType({cardId:this.cardId,year:this.currentYear.getFullYear()}).then(res=>{
+    statistics() {
+      selGroupType({cardId: this.cardId, year: this.currentYear.getFullYear()}).then(res => {
         this.formartSubsidy(res)
 
         this.subsidyType = echarts.init(this.$refs.subsidyType);
@@ -226,15 +221,15 @@ export default {
       })
 
     },
-    statistics2(){
-      selGroupYearType({cardId:this.cardId}).then(res=>{
-        if(res==""){
+    statistics2() {
+      selGroupYearType({cardId: this.cardId}).then(res => {
+        if (res == "") {
           return
         }
 
-        let series=[]
-        res.subsidyDtos.forEach(subType=>{
-          series.push( {
+        let series = []
+        res.subsidyDtos.forEach(subType => {
+          series.push({
             name: subType.subsidyTypeCN,
             type: 'bar',
             stack: 'total',
