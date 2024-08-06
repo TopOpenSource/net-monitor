@@ -12,11 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface SubsidyService extends IService<Subsidy> {
-    /**
-     * 按年统计 各个类型的补助
-     * @param dto
-     */
-    List<Subsidy> selSubsidyGroupType(SubsidyDto dto);
 
     /**
      * 统计各年 各个类型的补助

@@ -99,7 +99,7 @@
 import subsidyUserTable from "@/views/poor/user/subsidyUserTable.vue";
 import * as echarts from "echarts";
 import {getInfo} from "@/api/poor/user";
-import {selCountBySubsidyType, selGroupType, selGroupYearType} from "../../../api/poor/subsidy";
+import {selCountBySubsidyType, selGroupYearType} from "../../../api/poor/subsidy";
 import UserEdit from "@/views/poor/user/UserEdit.vue";
 
 export default {
@@ -176,51 +176,7 @@ export default {
         })
       })
     },
-    statistics() {
-      selGroupType({cardId: this.cardId, year: this.currentYear.getFullYear()}).then(res => {
-        this.formartSubsidy(res)
 
-        this.subsidyType = echarts.init(this.$refs.subsidyType);
-        this.subsidyType.setOption({
-          tooltip: {
-            trigger: 'item'
-          },
-          legend: {
-            top: '5%',
-            left: 'center'
-          },
-          series: [
-            {
-              name: '各类补贴',
-              type: 'pie',
-              radius: ['40%', '70%'],
-              avoidLabelOverlap: false,
-              itemStyle: {
-                borderRadius: 10,
-                borderColor: '#fff',
-                borderWidth: 2
-              },
-              label: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                label: {
-                  show: true,
-                  fontSize: 40,
-                  fontWeight: 'bold'
-                }
-              },
-              labelLine: {
-                show: false
-              },
-              data: res
-            }
-          ]
-        });
-      })
-
-    },
     statistics2() {
       selGroupYearType({cardId: this.cardId}).then(res => {
         if (res == "") {

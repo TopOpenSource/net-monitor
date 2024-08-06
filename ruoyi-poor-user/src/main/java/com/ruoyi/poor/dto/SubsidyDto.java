@@ -26,7 +26,7 @@ public class SubsidyDto {
     private Integer year;
     private BigDecimal money;
 
-
+    private Integer userCount;
 
     private List<BigDecimal> moneyDataList;
 

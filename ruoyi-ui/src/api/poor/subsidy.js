@@ -8,13 +8,6 @@ export function list(data) {
   })
 }
 
-export function selGroupType(data) {
-  return request({
-    url: '/poor/subsidy/selGroupType',
-    method: 'post',
-    data:data
-  })
-}
 
 export function selGroupYearType(data) {
   return request({

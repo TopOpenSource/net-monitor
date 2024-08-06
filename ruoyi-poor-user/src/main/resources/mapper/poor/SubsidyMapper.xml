@@ -4,6 +4,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.poor.mapper.SubsidyMapper">
 
+
+    <select id="selSubsidyGroupYearType" parameterType="com.ruoyi.poor.dto.SubsidyDto" resultType="com.ruoyi.poor.dto.SubsidyDto">
+        SELECT
+            t.subsidy_type, YEAR(t.subsidy_date) as year, SUM(t.money) as money
+        FROM
+            poor_subsidy t
+        <where>
+            <if test="cardId != null  and cardId != ''">and t.card_id=#{cardId}</if>
+            and t.card_id is not null
+        </where>
+        GROUP BY
+            t.subsidy_type,
+            YEAR (t.subsidy_date)
+        order by subsidy_type
+    </select>
+
+    <select id="selUserGroupYearType" parameterType="com.ruoyi.poor.dto.SubsidyDto" resultType="com.ruoyi.poor.dto.SubsidyDto">
+        SELECT
+        t.subsidy_type, YEAR(t.subsidy_date) as year, COUNT(t.card_id) as userCount
+        FROM
+        poor_subsidy t
+        <where>
+            <if test="cardId != null  and cardId != ''">and t.card_id=#{cardId}</if>
+            and t.card_id is not null
+        </where>
+        GROUP BY
+        t.subsidy_type,
+        YEAR (t.subsidy_date)
+        order by subsidy_type
+    </select>
+    <select id="getMaxMinYear" parameterType="com.ruoyi.poor.dto.SubsidyDto" resultType="com.ruoyi.poor.dto.SubsidyDto">
+        SELECT
+             max(YEAR(t.subsidy_date)) as maxYear,
+             min(YEAR(t.subsidy_date)) as minYear
+             FROM
+             poor_subsidy t
+
+        <where>
+            <if test="cardId != null  and cardId != ''">and t.card_id=#{cardId}</if>
+            and t.card_id is not null
+        </where>
+    </select>
+
+    <select id="getSubsidyTypes" parameterType="com.ruoyi.poor.dto.SubsidyDto" resultType="com.ruoyi.poor.dto.SubsidyDto">
+        select
+            DISTINCT(t1.subsidy_type) as subsidy_type,t2.dict_label as subsidyTypeCN
+        from poor_subsidy t1 left join sys_dict_data t2 on t1.subsidy_type=t2.dict_value
+        <where>
+           t2.dict_type='subsidy_type'
+           <if test="cardId != null  and cardId != ''">and t1.card_id=#{cardId}</if>
+        </where>
+    </select>
     <select id="selSubsidyList" parameterType="com.ruoyi.poor.dto.SubsidyDto"  resultType="com.ruoyi.poor.dto.SubsidyDto">
         select
         t1.id,t1.card_id,t1.subsidy_type,t1.subsidy_date, t1.money,t2.`name` as userName ,t3.file_name as fileName

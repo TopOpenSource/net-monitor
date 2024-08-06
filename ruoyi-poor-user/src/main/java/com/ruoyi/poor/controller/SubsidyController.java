@@ -55,10 +55,6 @@ public class SubsidyController extends BaseController {
     }
 
 
-    @PostMapping("selGroupType")
-    public List<Subsidy> selSubsidyGroupType(@RequestBody SubsidyDto dto) {
-        return subsidyService.selSubsidyGroupType(dto);
-    }
 
     @PostMapping("selGroupYearType")
     public SubsidyAllYearDto selSubsidyGroupYearType(@RequestBody SubsidyDto dto) {

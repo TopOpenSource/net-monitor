@@ -11,7 +11,6 @@ import com.ruoyi.poor.dto.SubsidyAnalysisDto;
 import com.ruoyi.poor.dto.SubsidyDto;
 import com.ruoyi.poor.mapper.SubsidyMapper;
 import com.ruoyi.poor.service.SubsidyService;
-import com.ruoyi.system.service.ISysDictDataService;
 import com.ruoyi.system.service.ISysDictTypeService;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,7 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     @Autowired
     private ISysDictTypeService dictTypeService;
 
-    @Override
-    public List<Subsidy> selSubsidyGroupType(SubsidyDto dto) {
-        return this.baseMapper.selSubsidyGroupType(dto);
-    }
+
 
     @Override
     public SubsidyAllYearDto selSubsidyGroupYearType(SubsidyDto dto) {

@@ -14,41 +14,34 @@ import java.util.Map;
 
 @Mapper
 public interface SubsidyMapper extends BaseMapper<Subsidy> {
-    @Select(" SELECT" +
-            " t.subsidy_type," +
-            " SUM( t.money ) as money" +
-            " FROM" +
-            " poor_subsidy t " +
-            " where t.card_id=#{cardId} and YEAR(t.subsidy_date)=#{year}" +
-            " GROUP BY" +
-            " t.subsidy_type")
-    List<Subsidy> selSubsidyGroupType(SubsidyDto dto);
 
-    @Select("SELECT " +
-            " t.subsidy_type, " +
-            " YEAR(t.subsidy_date) as year, " +
-            " SUM( t.money ) as money " +
-            "FROM " +
-            " poor_subsidy t  " +
-            " where t.card_id=#{cardId} " +
-            "GROUP BY " +
-            " t.subsidy_type, " +
-            " YEAR(t.subsidy_date) " +
-            "order by subsidy_type")
+
+    /**
+     * 按照补助类型、时间 统计金额
+     * @param dto
+     * @return
+     */
     List<SubsidyDto> selSubsidyGroupYearType(SubsidyDto dto);
 
-    @Select("SELECT" +
-            "  max(YEAR(t.subsidy_date)) as maxYear, " +
-            " min(YEAR(t.subsidy_date)) as minYear " +
-            " FROM" +
-            " poor_subsidy t " +
-            " where t.card_id=#{cardId}")
+    /**
+     * 按照补助类型、时间 统计人数
+     * @param dto
+     * @return
+     */
+    List<SubsidyDto> selUserGroupYearType(SubsidyDto dto);
+
+    /**
+     * 按照计算最大最小的年
+     * @param dto
+     * @return
+     */
     SubsidyDto getMaxMinYear(SubsidyDto dto);
 
-
-    @Select("select DISTINCT(t1.subsidy_type) as subsidy_type,t2.dict_label as subsidyTypeCN  " +
-            "from poor_subsidy t1 left join sys_dict_data t2 on t1.subsidy_type=t2.dict_value " +
-            "where t2.dict_type='subsidy_type'  and t1.card_id=#{cardId}")
+    /**
+     * 统计补助类型
+     * @param dto
+     * @return
+     */
     List<SubsidyDto> getSubsidyTypes(SubsidyDto dto);
 
     List<SubsidyDto> selSubsidyList(SubsidyDto dto);
