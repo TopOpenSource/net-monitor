@@ -51,4 +51,9 @@ public class FamilyDto{
 
     @ExcelProperty(value = "成员身份证号",converter = StringStringConverter.class)
     private String cardId;
+
+    /**
+     * 贫困人员数量
+     */
+    private Integer userCount;
 }

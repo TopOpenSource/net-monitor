@@ -24,11 +24,13 @@ public class SubsidyDto {
     private String subsidyType;
     private String subsidyTypeCN;
     private Integer year;
+
     private BigDecimal money;
+    private List<BigDecimal> moneyDataList;
 
     private Integer userCount;
+    private List<Integer> userCountDataList;
 
-    private List<BigDecimal> moneyDataList;
 
     private Integer minYear;
     private Integer maxYear;

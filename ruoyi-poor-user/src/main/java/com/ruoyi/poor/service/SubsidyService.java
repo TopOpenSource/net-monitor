@@ -19,6 +19,12 @@ public interface SubsidyService extends IService<Subsidy> {
      */
     SubsidyAllYearDto selSubsidyGroupYearType(SubsidyDto dto);
 
+    /**
+     * 统计各年 各个类型的人数
+     * @param dto
+     */
+    public SubsidyAllYearDto selUserCountGroupYearType(SubsidyDto dto);
+
     List<SubsidyDto> selSubsidyList(SubsidyDto dto);
 
     /**

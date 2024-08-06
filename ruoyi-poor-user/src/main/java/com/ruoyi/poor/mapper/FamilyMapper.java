@@ -14,4 +14,11 @@ public interface FamilyMapper extends BaseMapper<Family> {
     List<FamilyDto> selectFamilyList(FamilyDto family);
 
     FamilyDto selectFamilyById(@Param("id") Long id);
+
+    /**
+     * 统计每个村的贫困户数量
+     * @param family
+     * @return
+     */
+    List<FamilyDto> selUserCountGroupByVillage(FamilyDto family);
 }

@@ -85,6 +85,62 @@ public class SubsidyServiceImpl extends ServiceImpl<SubsidyMapper, Subsidy> impl
     }
 
     @Override
+    public SubsidyAllYearDto selUserCountGroupYearType(SubsidyDto dto) {
+        //类型
+        List<SubsidyDto> subsidyTypes = this.baseMapper.getSubsidyTypes(dto);
+
+        //无数据则返回空
+        if (subsidyTypes.size() <1) {
+            return null;
+        }
+
+
+        //获取年份跨度
+        SubsidyDto maxMinYear = this.baseMapper.getMaxMinYear(dto);
+
+        //获取类型-年份-补贴
+        List<SubsidyDto> subsidyDtoList= this.baseMapper.selUserGroupYearType(dto);
+
+
+
+        int[] years=NumberUtil.range(maxMinYear.getMinYear(), maxMinYear.getMaxYear());
+        SubsidyAllYearDto subsidyAllYearDto = new SubsidyAllYearDto();
+        subsidyAllYearDto.setYears(years);
+
+        /**
+         * 类型数据处理
+         */
+        List<SubsidyDto> typeDtoList=new ArrayList<>();
+        //遍历 类型
+        subsidyTypes.forEach(type -> {
+            SubsidyDto typeDto=new SubsidyDto();
+            typeDto.setSubsidyType(type.getSubsidyType());
+            typeDto.setSubsidyTypeCN(type.getSubsidyTypeCN());
+
+            List<Integer> userCountDataList=new ArrayList<>();
+            //遍历年份 没有的设为0
+            for(int i=0;i<years.length;i++){
+                Integer userCount=0;
+                //过滤数据
+                int finalI=years[i];
+                List<SubsidyDto> data = subsidyDtoList.stream().filter(subsidyDto -> {
+                    return (subsidyDto.getYear().intValue()==finalI) && (subsidyDto.getSubsidyType().equals(typeDto.getSubsidyType()));
+                }).collect(Collectors.toList());
+
+                if(data.size()>0){
+                    userCount=data.get(0).getUserCount();
+                }
+                userCountDataList.add(userCount);
+            }
+            typeDto.setUserCountDataList(userCountDataList);
+            typeDtoList.add(typeDto);
+        });
+
+        subsidyAllYearDto.setSubsidyDtos(typeDtoList);
+        return subsidyAllYearDto;
+    }
+
+    @Override
     public List<SubsidyDto> selSubsidyList(SubsidyDto dto) {
         return this.baseMapper.selSubsidyList(dto);
     }

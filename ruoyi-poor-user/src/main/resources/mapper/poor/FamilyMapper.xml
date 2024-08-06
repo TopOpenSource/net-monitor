@@ -46,4 +46,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+    <select id="selUserCountGroupByVillage" parameterType="com.ruoyi.poor.dto.FamilyDto" resultType="com.ruoyi.poor.dto.FamilyDto">
+        SELECT
+            t2.village,COUNT(*) as userCount
+        FROM
+            poor_family_user t1
+                LEFT JOIN poor_family t2  on t1.family_no=t2.family_no
+        GROUP BY t2.village
+    </select>
+
 </mapper>
