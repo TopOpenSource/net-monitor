@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
  * @author ruoyi
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-//@PropertySource(value = {"file:./application-druid.yml"},encoding = "UTF-8", ignoreResourceNotFound = true, factory = YAMLPropertySourceFactory.class)
+@PropertySource(value = {"file:./application-druid.yml"},encoding = "UTF-8", ignoreResourceNotFound = true, factory = YAMLPropertySourceFactory.class)
 public class RuoYiApplication
 {
     public static void main(String[] args)
