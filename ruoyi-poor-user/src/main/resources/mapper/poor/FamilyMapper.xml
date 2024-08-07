@@ -48,10 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selUserCountGroupByVillage" parameterType="com.ruoyi.poor.dto.FamilyDto" resultType="com.ruoyi.poor.dto.FamilyDto">
         SELECT
-            t2.village,COUNT(*) as userCount
+            t3.dict_label as village,COUNT(*) as userCount
         FROM
             poor_family_user t1
                 LEFT JOIN poor_family t2  on t1.family_no=t2.family_no
+                left join sys_dict_data t3 on (t3.dict_type='village' and t2.village=t3.dict_value)
         GROUP BY t2.village
     </select>
 

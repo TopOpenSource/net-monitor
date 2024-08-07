@@ -1,31 +1,28 @@
 <template>
   <div class="app-container home">
-
     <el-row>
+       <el-col :span="8">
+         <el-card class="box-card">
+           <div slot="header" class="clearfix">
+             <span>各村贫困人数</span>
+           </div>
+           <div ref="villageMap" style="height: 680px"/>
+         </el-card>
+       </el-col>
+
+      <el-col :span="16">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>各类补贴金额</span>
           </div>
           <div ref="subsidyYear" style="height: 300px"/>
         </el-card>
-    </el-row>
 
-    <el-row>
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>各类补贴覆盖人数</span>
-        </div>
-        <div ref="userCountYear" style="height: 300px"/>
-      </el-card>
-    </el-row>
-
-    <el-row>
-      <el-col :span="12">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>卡片名称</span>
+            <span>各类补贴覆盖人数</span>
           </div>
-
+          <div ref="userCountYear" style="height: 300px"/>
         </el-card>
       </el-col>
     </el-row>
@@ -33,14 +30,15 @@
 </template>
 
 <script>
-import {selSubsidyGroupYearType, selUserCountGroupYearType} from "../api/poor/analysis";
+import {selSubsidyGroupYearType, selUserCountGroupYearType,selUserCountGroupByVillage} from "../api/poor/analysis";
 import * as echarts from "echarts";
-
+import yaozhan from '@/assets/geojson/yaozhan.json'
 export default {
   data() {
     return {
       subsidyYear: null,//每年补助金额
       userCountYear:null,//每年补助人数
+      villageMap:null,//村落地图
     };
   },
   methods:{
@@ -144,11 +142,49 @@ export default {
         });
       })
 
+    },
+    villageCount(){
+      selUserCountGroupByVillage().then(res=>{
+        let data=[]
+        res.forEach(x=>{
+          data.push({name: x.village,value: x.userCount})
+        })
+
+        this.villageMap = echarts.init(this.$refs.villageMap);
+        echarts.registerMap('yaozhan', yaozhan);
+
+        this.villageMap.setOption(
+          {
+            visualMap: {
+              min: 0,
+              max: 20,
+              text: ['20', '0'],
+              inRange: {
+                color: ['yellow','red']
+              }
+            },
+            series: [
+              {
+                type: 'map',
+                map: 'yaozhan',
+                label: {
+                  show: true
+                },
+                data: data,
+              }
+            ]
+          }
+        )
+
+      })
+
+
     }
   },
   mounted(){
     this.subsidy()
     this.userCount()
+    this.villageCount()
   }
 };
 </script>
