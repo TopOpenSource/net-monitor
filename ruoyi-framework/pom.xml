@@ -63,6 +63,11 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-poor-user</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-poor-village</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

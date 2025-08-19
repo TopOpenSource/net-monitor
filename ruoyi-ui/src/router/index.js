@@ -113,6 +113,20 @@ export const constantRoutes = [
         meta: { title: '原始数据', icon: 'user' }
       }
     ]
+  },
+  {
+    path: '/village',
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'village/:villageId',
+        component: () => import('@/views/village/edit.vue'),
+        name: 'VillageEdit',
+        meta: { title: '村庄管理', icon: 'user' }
+      }
+    ]
   }
 ]
 

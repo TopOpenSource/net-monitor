@@ -72,4 +72,14 @@ public class User extends BaseEntity {
 
     @TableField("village")
     private String village;
+
+    @TableField("village_id")
+    private Long villageId;
+
+    //人员类型 0 普通 1重点关注 2残疾 3贫困
+    @TableField("type")
+    private String type;
+
+    @TableField("备注")
+    private String remark;
 }
