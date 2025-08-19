@@ -27,6 +27,7 @@
             <artifactId>ruoyi-poor-user</artifactId>
         </dependency>
 
+
     </dependencies>
 
 </project>

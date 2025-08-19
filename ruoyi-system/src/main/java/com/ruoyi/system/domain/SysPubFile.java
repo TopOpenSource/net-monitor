@@ -11,13 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("poor_data_file")
-public class SysFile extends BaseEntity {
+@TableName("sys_file")
+public class SysPubFile extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @TableId
     private Long id;
