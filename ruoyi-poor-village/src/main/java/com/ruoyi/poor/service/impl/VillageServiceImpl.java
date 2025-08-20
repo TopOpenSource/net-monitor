@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VillageServiceImpl extends ServiceImpl<VillageMapper, Village> implements IVillageService {
@@ -23,9 +24,20 @@ public class VillageServiceImpl extends ServiceImpl<VillageMapper, Village> impl
     public List<VillageDto> selectList(VillageDto dto) {
         QueryWrapper<Village> queryWrapper = new QueryWrapper<Village>();
         List<Village> villages = this.baseMapper.selectList(queryWrapper);
-        List<VillageDto> villageDtoList = VillageConvert.INSTANCE.convert(villages);
 
-        List<Map<String, Object>> maps = industryService.groupByVillageId();
+        System.out.println(villages);
+        List<VillageDto> villageDtoList = VillageConvert.INSTANCE.convert2ListDto(villages);
+        //查询特色企业数量
+        List<Map<String, Object>> villageCountList = industryService.groupByVillageId();
+
+        Map<Long,Long> villageCountMap=villageCountList.stream().collect(Collectors.toMap(
+                map -> (Long) map.get("villageId"),
+                map -> (Long) map.get("count")
+        ));
+
+        villageDtoList.forEach(item -> {
+            item.setIndustryCount(villageCountMap.get(item.getId()));
+        });
 
         return villageDtoList;
     }

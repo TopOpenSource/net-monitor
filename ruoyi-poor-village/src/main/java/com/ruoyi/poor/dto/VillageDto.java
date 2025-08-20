@@ -45,5 +45,5 @@ public class VillageDto {
     /**
      * 企业数量
      */
-    private Integer industryCount;
+    private Long industryCount;
 }

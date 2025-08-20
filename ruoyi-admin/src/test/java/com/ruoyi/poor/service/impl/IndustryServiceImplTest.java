@@ -37,4 +37,9 @@ public class IndustryServiceImplTest {
         List<VillageDto> villageDtos = villageService.selectList(null);
         System.out.println(JSON.toJSONString(villageDtos));
     }
+
+    @Test
+    public void convert(){
+
+    }
 }
