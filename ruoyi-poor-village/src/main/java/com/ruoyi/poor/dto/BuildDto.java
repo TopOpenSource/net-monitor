@@ -49,6 +49,5 @@ public class BuildDto {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long villageId;
 
-    @JsonSerialize(using = ToStringSerializer.class)
     private List<Long> imageIds;
 }

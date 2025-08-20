@@ -24,17 +24,18 @@
       </el-form-item>
 
       <el-row>
-        <el-form-item label="村容村貌" prop="imageIds">
+        <el-divider content-position="left">村容村貌</el-divider>
 
-          <el-image :src="src" style="width: 300px; height: 200px" :preview-src-list="srcList">
+        <el-form-item label="" prop="imageIds">
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <!-- 每个图片项 -->
+            <div v-for="imageId in form.imageIds" :key="imageId" style="position: relative; width: 300px; height: 200px;">
+              <el-image :src="src" style="width: 100%; height: 100%;" :preview-src-list="[src]"></el-image>
+              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleImageDelete(imageId)" style="position: absolute; top: 10px; left: 10px;">删除</el-button>
+            </div>
+          </div>
 
-          </el-image>
-
-          <el-image :src="src" style="width: 300px; height: 200px" :preview-src-list="srcList">
-
-          </el-image>
-
-          <el-upload :action="upload.action" :headers="upload.headers" :auto-upload="true"  @on-success="handleUploadSuccess" :show-file-list="false"	>
+          <el-upload :action="upload.action" :headers="upload.headers" :auto-upload="true"  :on-success="handleUploadSuccess" :show-file-list="false"	>
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
@@ -51,6 +52,7 @@
 <script>
 import { getToken } from '@/utils/auth'
 import {saveOrUpdate, getInfo} from "@/api/poor/village";
+import imageIds from "core-js/internals/array-includes";
 export default {
   data() {
     return {
@@ -92,7 +94,8 @@ export default {
         villagerCount:0,
         familyCount:0,
         admin:'',
-        phone:''
+        phone:'',
+        imageIds:[]
       };
       this.resetForm("form");
     },
@@ -100,7 +103,8 @@ export default {
       this.reset()
       this.loading = true
       getInfo(this.villageId).then(res => {
-        this.form = res;
+        this.form = res
+        console.log(this.form)
         this.loading = false
       })
     },
@@ -117,11 +121,13 @@ export default {
         }
       });
     },
-    handleRemove(file) {
-      console.log(file);
+    // 删除图片
+    handleImageDelete(imageId){
+      this.form.imageIds.splice(imageIds.indexOf(imageId), 1)
     },
+    // 上传图片
     handleUploadSuccess(response, file, fileList){
-      console.log(response,file,fileList);
+      this.form.imageIds.push(response.data);
     }
   },
   created() {

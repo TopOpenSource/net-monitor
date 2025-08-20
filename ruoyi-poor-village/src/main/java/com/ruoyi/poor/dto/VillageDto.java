@@ -53,6 +53,5 @@ public class VillageDto extends BaseDto{
      */
     private Long industryCount;
 
-    @JsonSerialize(using = ToStringSerializer.class)
     private List<Long> imageIds;
 }
