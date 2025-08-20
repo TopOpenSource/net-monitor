@@ -17,4 +17,8 @@ public interface VillageConvert {
      VillageDto convert2Dto(Village bean);
 
      List<VillageDto> convert2ListDto(List<Village> bean);
+
+     Village convert2Entity(VillageDto bean);
+
+     List<Village> convert2Entity(List<VillageDto> bean);
 }

@@ -33,6 +33,10 @@ public class SysPubFile extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long size;
 
+    @TableField("ref_id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long refId;
 
-
+    @TableField("ref_type")
+    private String refType;
 }

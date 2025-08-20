@@ -10,4 +10,8 @@ public interface IVillageService extends IService<Village> {
 
     List<VillageDto> selectList(VillageDto dto);
 
+    Long saveOrUpdateVillage(VillageDto domain);
+    void removeVillageById(Long id);
+
+    VillageDto getVillageById(Long id);
 }

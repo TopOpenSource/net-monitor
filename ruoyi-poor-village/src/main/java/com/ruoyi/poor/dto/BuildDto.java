@@ -1,6 +1,5 @@
 package com.ruoyi.poor.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -12,42 +11,43 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VillageDto {
+public class BuildDto {
     /**
-     * 主键ID
+     * 主键 ID
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
-     * 村庄名称
+     * 名称
      */
     private String name;
 
     /**
-     * 村民数量
-     */
-    private Integer villagerCount;
-
-    /**
-     * 家庭/户数
-     */
-    private Integer familyCount;
-
-    /**
-     * 管理员/负责人
-     */
-    private String admin;
-
-    /**
-     * 联系电话
+     * 手机号
      */
     private String phone;
 
     /**
-     * 企业数量
+     * 地址
      */
-    private Long industryCount;
+    private String address;
+
+    /**
+     * 类型
+     */
+    private String type;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 所属村庄 ID
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long villageId;
 
     @JsonSerialize(using = ToStringSerializer.class)
     private List<Long> imageIds;

@@ -1,6 +1,7 @@
 package com.ruoyi.poor.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VillageDto {
+public class IndustryDto {
     /**
      * 主键ID
      */
@@ -20,19 +21,11 @@ public class VillageDto {
     private Long id;
 
     /**
-     * 村庄名称
+     * 名称
      */
     private String name;
 
-    /**
-     * 村民数量
-     */
-    private Integer villagerCount;
 
-    /**
-     * 家庭/户数
-     */
-    private Integer familyCount;
 
     /**
      * 管理员/负责人
@@ -45,10 +38,30 @@ public class VillageDto {
     private String phone;
 
     /**
-     * 企业数量
+     * 所属行业
      */
-    private Long industryCount;
+    private String industry;
 
+    /**
+     * 员工数量
+     */
+    private Integer employeeCount;
+
+    /**
+     * 成立日期
+     */
+    private java.time.LocalDate foundedDate;
+
+    /**
+     * 状态（如：正常、停业、注销等）
+     */
+    private String state;
+
+    /**
+     * 所属村庄ID
+     */
     @JsonSerialize(using = ToStringSerializer.class)
+    private Long villageId;
+
     private List<Long> imageIds;
 }
