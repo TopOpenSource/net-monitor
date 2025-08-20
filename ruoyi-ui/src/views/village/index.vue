@@ -13,10 +13,11 @@
           <span @click="handleView(scope.row)" style="cursor: pointer;color: #409eff">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="人口数量" width="150" align="center" prop="villagerCount"/>
-      <el-table-column label="支部书记" width="200" align="center" prop="admin"/>
-      <el-table-column label="耕地面积" width="200" align="center" prop="landArea"/>
-      <el-table-column label="特色产业" width="200" align="center" prop="industryCount"/>
+      <el-table-column label="人口数量" width="100" align="center" prop="villagerCount"/>
+      <el-table-column label="户口数量" width="100" align="center" prop="familyCount"/>
+      <el-table-column label="支部书记" width="150" align="center" prop="admin"/>
+      <el-table-column label="联系电话" width="150" align="center" prop="phone"/>
+      <el-table-column label="特色产业" width="100" align="center" prop="industryCount"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="100">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -24,7 +25,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
+<!--          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>-->
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -38,12 +39,41 @@
       @pagination="getList"
     />
 
+    <el-dialog :title="title" :visible.sync="open" width="800px" :close-on-click-modal="false" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="村名" prop="name">
+          <el-input v-model="form.name"/>
+        </el-form-item>
+
+        <el-form-item label="人口数量" prop="villagerCount">
+          <el-input-number v-model="form.villagerCount" :min="1"/>
+        </el-form-item>
+
+        <el-form-item label="户口数量" prop="familyCount">
+          <el-input-number v-model="form.familyCount" :min="1"/>
+        </el-form-item>
+
+        <el-form-item label="支部书记" prop="admin">
+          <el-input v-model="form.admin"/>
+        </el-form-item>
+
+        <el-form-item label="联系电话" prop="phone">
+          <el-input v-model="form.phone"/>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 
-import {list, saveOrUpdate, del, getInfo} from "@/api/poor/user";
+import {list, saveOrUpdate, del, getInfo} from "@/api/poor/village";
 import {parseTime} from "@/utils/ruoyi";
 export default {
   name: "PoorUser",
@@ -79,8 +109,20 @@ export default {
         open:false
       },
       // 表单参数
-      form: {},
+      form: {
 
+      },
+      rules:{
+        name: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        admin: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ],
+        phone: [
+          {required: true, message: "不能为空", trigger: "blur"}
+        ]
+      }
     };
   },
   created() {
@@ -90,70 +132,36 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
-      // list(this.queryParams).then(response => {
-      //   this.dataList = response.rows
-      //   this.total = response.total
-      //   this.loading = false;
-      // })
-
-      this.loading = false;
-
-      this.dataList = [{
-           name:'村庄1',
-        villagerCount:5,
-        admin:'张三',
-        landArea:5,
-        industryCount:5
-      },
-        {
-          name:'村庄1',
-          villagerCount:5,
-          admin:'张三',
-          landArea:5,
-          industryCount:5
-        },
-        {
-          name:'村庄2',
-          villagerCount:5,
-          admin:'张三',
-          landArea:5,
-          industryCount:5
-        },
-        {
-          name:'村庄3',
-          villagerCount:5,
-          admin:'张三',
-          landArea:5,
-          industryCount:5
-        },
-        {
-          name:'村庄4',
-          villagerCount:5,
-          admin:'张三',
-          landArea:5,
-          industryCount:5
-        },
-      ]
+       list(this.queryParams).then(response => {
+         this.dataList = response.rows
+         this.total = response.total
+         this.loading = false;
+      })
     },
     // 取消按钮
     cancel() {
       this.open = false;
       this.reset();
     },
+    submitForm(){
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          saveOrUpdate(this.form).then(response => {
+            this.$modal.msgSuccess("修改成功");
+            this.open = false;
+            this.getList();
+          })
+        }
+      });
+    },
     // 表单重置
     reset() {
       this.form = {
-        id: null,
-        familyId: null,
-        cardId: null,
-        name: null,
-        sex: null,
-        birthday: null,
-        disability: null,
-        disabilityId: null,
-        live: null,
-        phone: null,
-        address: null
+        name:'',
+        villagerCount:0,
+        familyCount:0,
+        admin:'',
+        phone:''
       };
       this.resetForm("form");
     },
@@ -173,8 +181,6 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
-
-
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -194,16 +200,6 @@ export default {
         this.open = true;
         this.title = "修改贫困人员";
       });
-    },
-    handleSaveCancel(){
-      this.open=false
-      this.reset()
-    },
-    /**保存成功**/
-    handleSaveSuccess(){
-      this.open=false
-      this.getList()
-      this.$modal.msgSuccess("修改成功");
     },
     /** 删除按钮操作 */
     handleDelete(row) {

@@ -68,19 +68,22 @@ public class VillageServiceImpl extends ServiceImpl<VillageMapper, Village> impl
         long id;
         if(domain.getId()==null){
              id = IdUtil.getSnowflakeNextId();
+             domain.setId(id);
         }else{
             id=domain.getId();
         }
 
-        domain.setId(id);
+
         this.saveOrUpdate(VillageConvert.INSTANCE.convert2Entity(domain));
 
         //图片关系
-        UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("ref_type",IMG_REF_TYPE);
-        updateWrapper.eq("ref_id",id);
-        updateWrapper.in("id",domain.getImageIds());
-        this.sysPubFileService.update(updateWrapper);
+        if(domain.getImageIds()!=null && domain.getImageIds().size()>0){
+            UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.set("ref_type",IMG_REF_TYPE);
+            updateWrapper.eq("ref_id",id);
+            updateWrapper.in("id",domain.getImageIds());
+            this.sysPubFileService.update(updateWrapper);
+        }
         return id;
 
     }

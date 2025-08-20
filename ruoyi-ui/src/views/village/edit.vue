@@ -3,25 +3,25 @@
     <el-row>
       <el-tabs v-model="activeName">
         <el-tab-pane label="基本信息" name="baseInfo">
-          <BaseInfo></BaseInfo>
+          <BaseInfo :village-id="villageId"></BaseInfo>
         </el-tab-pane>
         <el-tab-pane label="重点人员" name="villager1">
-          <Villager></Villager>
+          <Villager :village-id="villageId" type="1"></Villager>
         </el-tab-pane>
         <el-tab-pane label="贫困人员" name="villager2">
-          <Villager></Villager>
+          <Villager :village-id="villageId" type="2"></Villager>
         </el-tab-pane>
         <el-tab-pane label="残疾人员" name="villager3">
-          <Villager></Villager>
+          <Villager :village-id="villageId" type="3"></Villager>
         </el-tab-pane>
         <el-tab-pane label="土地信息" name="land">
-          <Land></Land>
+          <Land :village-id="villageId"></Land>
         </el-tab-pane>
         <el-tab-pane label="危房信息" name="build">
-          <Build></Build>
+          <Build :village-id="villageId"></Build>
         </el-tab-pane>
         <el-tab-pane label="特色产业" name="industry">
-          <Industry></Industry>
+          <Industry :village-id="villageId"></Industry>
         </el-tab-pane>
       </el-tabs>
 
@@ -43,7 +43,15 @@ export default {
   data() {
     return {
       activeName:'baseInfo',
+      villageId:''
     }
+  },
+  mounted() {
+
+  },
+  created() {
+    this.villageId = this.$route.params.villageId
   }
+
 }
 </script>

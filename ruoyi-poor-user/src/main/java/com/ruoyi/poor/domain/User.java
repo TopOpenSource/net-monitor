@@ -80,6 +80,6 @@ public class User extends BaseEntity {
     @TableField("type")
     private String type;
 
-    @TableField("备注")
+    @TableField("remark")
     private String remark;
 }

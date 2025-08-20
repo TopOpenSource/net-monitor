@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/system/file")
+@RequestMapping("/system/pub_file")
 public class SysPubFileController extends BaseController {
     @Autowired
     private SysPubFileService sysFileService;

@@ -62,11 +62,13 @@ public class LandServiceImpl extends ServiceImpl<LandMapper, Land> implements IL
         this.saveOrUpdate(LandConvert.INSTANCE.convert2Entity(dto));
 
         //图片关系
-        UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("ref_type",IMG_REF_TYPE);
-        updateWrapper.eq("ref_id",id);
-        updateWrapper.in("id",dto.getImageIds());
-        this.sysPubFileService.update(updateWrapper);
+        if(dto.getImageIds()!=null && dto.getImageIds().size()>0) {
+            UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.set("ref_type", IMG_REF_TYPE);
+            updateWrapper.eq("ref_id", id);
+            updateWrapper.in("id", dto.getImageIds());
+            this.sysPubFileService.update(updateWrapper);
+        }
         return id;
     }
 }

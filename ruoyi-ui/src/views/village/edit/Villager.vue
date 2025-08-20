@@ -10,6 +10,7 @@
         <template slot-scope="scope">
 
           <el-image  :src="imageUrl" style="max-width: 60px;height: auto" :preview-src-list="[imageUrl]">
+
           </el-image>
 
         </template>
@@ -52,6 +53,16 @@ export default {
         reason:'土地纠纷'
       }]
     }
-  }
+  },
+  props: {
+    villageId: {
+      type: String,
+      default: null
+    },
+    type:{
+      type: String,
+      default: null
+    }
+  },
 }
 </script>

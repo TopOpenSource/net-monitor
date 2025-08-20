@@ -81,6 +81,12 @@ export default {
         reason:'土地纠纷'
       }]
     }
-  }
+  },
+  props: {
+    villageId: {
+      type: String,
+      default: null
+    }
+  },
 }
 </script>

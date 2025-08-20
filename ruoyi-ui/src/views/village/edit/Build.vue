@@ -56,6 +56,12 @@ export default {
         address:'XX村X号'
       }]
     }
-  }
+  },
+  props: {
+    villageId: {
+      type: String,
+      default: null
+    }
+  },
 }
 </script>

@@ -61,6 +61,12 @@ export default {
       rules:{},
       src: 'https://imgs.699pic.com/images/503/230/719.jpg!detail.v1',
     }
-  }
+  },
+  props: {
+    villageId: {
+      type: String,
+      default: null
+    }
+  },
 }
 </script>
