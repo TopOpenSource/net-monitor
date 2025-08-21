@@ -162,7 +162,7 @@
 
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-poor-village</artifactId>
+                <artifactId>ruoyi-net-monitor</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
@@ -192,8 +192,7 @@
         <module>ruoyi-framework</module>
         <module>ruoyi-system</module>
         <module>ruoyi-common</module>
-        <module>ruoyi-poor-user</module>
-        <module>ruoyi-poor-village</module>
+        <module>ruoyi-net-monitor</module>
     </modules>
     <packaging>pom</packaging>
 
