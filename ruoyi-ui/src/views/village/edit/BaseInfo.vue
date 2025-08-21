@@ -106,7 +106,6 @@ export default {
       this.loading = true
       getInfo(this.villageId).then(res => {
         this.form = res
-        console.log(this.form)
         this.loading = false
       })
     },
@@ -116,6 +115,7 @@ export default {
         if (valid) {
           saveOrUpdate(this.form).then(response => {
             this.loading = false
+            this.getBaseInfo()
             this.$modal.msgSuccess("修改成功");
           })
         }else{

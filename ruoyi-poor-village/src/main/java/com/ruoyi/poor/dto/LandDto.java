@@ -2,6 +2,7 @@ package com.ruoyi.poor.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -52,5 +53,6 @@ public class LandDto {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long villageId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<Long> imageIds;
 }

@@ -76,13 +76,19 @@ public class VillageServiceImpl extends ServiceImpl<VillageMapper, Village> impl
 
         this.saveOrUpdate(VillageConvert.INSTANCE.convert2Entity(domain));
 
+
         //图片关系
+        UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("ref_type",null).set("ref_id",null);
+        updateWrapper.eq("ref_id",id).eq("ref_type",IMG_REF_TYPE);
+        this.sysPubFileService.update(updateWrapper);
+
         if(domain.getImageIds()!=null && domain.getImageIds().size()>0){
-            UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.set("ref_type",IMG_REF_TYPE);
-            updateWrapper.eq("ref_id",id);
-            updateWrapper.in("id",domain.getImageIds());
-            this.sysPubFileService.update(updateWrapper);
+            UpdateWrapper<SysPubFile> updateWrapper2 = new UpdateWrapper<>();
+            updateWrapper2.set("ref_type",IMG_REF_TYPE);
+            updateWrapper2.set("ref_id",id);
+            updateWrapper2.in("id",domain.getImageIds());
+            this.sysPubFileService.update(updateWrapper2);
         }
         return id;
 

@@ -96,12 +96,17 @@ public class BuildServiceImpl extends ServiceImpl<BuildMapper,Build> implements 
         this.saveOrUpdate(BuildConvert.INSTANCE.convert2Entity(dto));
 
         //图片关系
-        if(dto.getImageIds()!=null && dto.getImageIds().size()>0) {
-            UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.set("ref_type", IMG_REF_TYPE);
-            updateWrapper.eq("ref_id", id);
-            updateWrapper.in("id", dto.getImageIds());
-            this.sysPubFileService.update(updateWrapper);
+        UpdateWrapper<SysPubFile> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("ref_type",null).set("ref_id",null);
+        updateWrapper.eq("ref_id",id).eq("ref_type",IMG_REF_TYPE);
+        this.sysPubFileService.update(updateWrapper);
+
+        if(dto.getImageIds()!=null && dto.getImageIds().size()>0){
+            UpdateWrapper<SysPubFile> updateWrapper2 = new UpdateWrapper<>();
+            updateWrapper2.set("ref_type",IMG_REF_TYPE);
+            updateWrapper2.set("ref_id",id);
+            updateWrapper2.in("id",dto.getImageIds());
+            this.sysPubFileService.update(updateWrapper2);
         }
         return id;
     }

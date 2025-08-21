@@ -53,5 +53,6 @@ public class VillageDto extends BaseDto{
      */
     private Long industryCount;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<Long> imageIds;
 }

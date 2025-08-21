@@ -1,5 +1,6 @@
 package com.ruoyi.poor.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
@@ -49,5 +50,6 @@ public class BuildDto {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long villageId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<Long> imageIds;
 }
