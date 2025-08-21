@@ -30,7 +30,7 @@
           <div style="display: flex; flex-wrap: wrap; gap: 10px;">
             <!-- 每个图片项 -->
             <div v-for="imageId in form.imageIds" :key="imageId" style="position: relative; width: 300px; height: 200px;">
-              <el-image :src="src" style="width: 100%; height: 100%;" :preview-src-list="[src]"></el-image>
+              <el-image :src="upload.imageBaseUrl+imageId+'?token='+upload.token" style="width: 100%; height: 100%;" :preview-src-list="[upload.imageBaseUrl+imageId+'?token='+upload.token]"></el-image>
               <el-button size="mini" type="text" icon="el-icon-delete" @click="handleImageDelete(imageId)" style="position: absolute; top: 10px; left: 10px;">删除</el-button>
             </div>
           </div>
@@ -73,7 +73,9 @@ export default {
         action:process.env.VUE_APP_BASE_API +'/system/pub_file/upload',
         headers:{
           Authorization:'Bearer ' + getToken()
-        }
+        },
+        imageBaseUrl:process.env.VUE_APP_BASE_API +'/system/pub_file/download/',
+        token:getToken()
       },
       src: 'https://p7.zbjimg.com/service/2017-03/08/service/58c00e36be1ea.jpg',
       srcList:[
@@ -127,7 +129,8 @@ export default {
     },
     // 上传图片
     handleUploadSuccess(response, file, fileList){
-      this.form.imageIds.push(response.data);
+      this.form.imageIds.push(response.msg);
+      console.log(response.msg);
     }
   },
   created() {

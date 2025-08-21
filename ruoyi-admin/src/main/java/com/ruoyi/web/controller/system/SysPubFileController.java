@@ -35,7 +35,7 @@ public class SysPubFileController extends BaseController {
         sysFile.setPath(filePath);
 
         sysFileService.save(sysFile);
-        return AjaxResult.success(id);
+        return AjaxResult.success(String.valueOf(id));
     }
 
     @GetMapping("download/{fileId}")

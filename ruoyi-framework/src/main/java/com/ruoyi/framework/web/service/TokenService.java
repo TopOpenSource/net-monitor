@@ -220,6 +220,11 @@ public class TokenService
         if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX))
         {
             token = token.replace(Constants.TOKEN_PREFIX, "");
+        }else if(request.getParameter("token")!=null){
+            //支持从url链接中获取
+            token = request.getParameter("token");
+        }else{
+            token =null;
         }
         return token;
     }

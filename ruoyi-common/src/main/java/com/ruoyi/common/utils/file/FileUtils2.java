@@ -29,7 +29,7 @@ public class FileUtils2 {
     public static String upload(String baseDir,MultipartFile multipartFile) throws IOException {
         String fileName = generateUniqueFile(baseDir,multipartFile.getOriginalFilename());
         multipartFile.transferTo(new File(fileName));
-        return fileName.replace(baseDir, "");
+        return Paths.get(baseDir).relativize(Paths.get(fileName)).toString();
     }
 
 
