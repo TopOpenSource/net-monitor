@@ -5,10 +5,11 @@ import com.ruoyi.net.domain.NetDns;
 import com.ruoyi.net.domain.NetFlow;
 import com.ruoyi.net.mapper.NetDnsMapper;
 import com.ruoyi.net.mapper.NetFlowMapper;
+import com.ruoyi.net.service.INetDnsService;
 import com.ruoyi.net.service.INetFlowService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NetDnsServiceImpl extends ServiceImpl<NetDnsMapper, NetDns> implements INetDns {
+public class NetDnsServiceImpl extends ServiceImpl<NetDnsMapper, NetDns> implements INetDnsService {
 
 }

@@ -31,11 +31,16 @@ public class NetFlow extends BaseEntity{
     @TableField("source_ip")
     private String sourceIp;
 
+    @TableField("source_port")
+    private Integer sourcePort;
     /**
      * 目标IP地址
      */
     @TableField("target_ip")
     private String targetIp;
+
+    @TableField("target_port")
+    private Integer targetPort;
 
     /**
      * 协议类型 (TCP, UDP, ICMP, etc.)
@@ -53,7 +58,8 @@ public class NetFlow extends BaseEntity{
      * 数据包长度（字节）
      */
     @TableField("length")
-    private Double length;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long length;
 
     /**
      * 原始数据包ID（可关联PCAP解析记录）
