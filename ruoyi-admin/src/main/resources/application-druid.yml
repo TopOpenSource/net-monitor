@@ -4,8 +4,17 @@ server:
 ruoyi:
     # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
     profile: D:/poor/uploadPath
+    tshark: D:/develop/WiresharkPortable64/App/Wireshark/tshark.exe
 # 数据源配置
 spring:
+    data:
+      mongodb:
+        host: 81.70.179.86
+        port: 27017
+        database: net_monitor
+        username: mongo
+        password: Qwe123-=
+
     # redis 配置
     redis:
         # 地址

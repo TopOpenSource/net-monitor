@@ -33,6 +33,7 @@
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <cz88db.version>1.0.2.10</cz88db.version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -156,12 +157,6 @@
 
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-poor-user</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-net-monitor</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
@@ -183,6 +178,12 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${org.mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.cz88</groupId>
+                <artifactId>czdb-search</artifactId>
+                <version>${cz88db.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

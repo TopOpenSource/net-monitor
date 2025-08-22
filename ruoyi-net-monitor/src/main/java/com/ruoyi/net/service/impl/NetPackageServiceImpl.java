@@ -4,9 +4,22 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.net.domain.NetPackage;
 import com.ruoyi.net.mapper.NetPackageMapper;
 import com.ruoyi.net.service.INetPackageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NetPackageServiceImpl extends ServiceImpl<NetPackageMapper, NetPackage> implements INetPackageService {
 
+    @Value("${ruoyi.tshark}")
+    private String tshake;
+
+//    @Autowired
+//    private INetFlowService netFlowService;
+
+    @Override
+    public Integer analyzePcap(Long packageId) throws Exception {
+//        List<NetFlow> netFlows = PcapUtil.analyzePcap(tshake, "D:/sss.pcapng");
+//        netFlowService.saveBatch(netFlows);
+        return 0;
+    }
 }
