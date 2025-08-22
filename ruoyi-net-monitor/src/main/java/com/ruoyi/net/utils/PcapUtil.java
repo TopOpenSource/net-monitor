@@ -1,5 +1,6 @@
 package com.ruoyi.net.utils;
 
+import cn.hutool.core.util.IdUtil;
 import com.ruoyi.net.domain.NetFlow;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,11 +12,11 @@ public class PcapUtil {
 
     private static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win");
 
-    public static List<NetFlow> analyzePcap(String tsharkPath,String pcapPath) throws Exception {
+    public static List<NetFlow> analyzePcap(String tsharkPath,String pcapPath,Long packageId) throws Exception {
         if (IS_WINDOWS) {
-            return analyzePcapWindows(tsharkPath,pcapPath);
+            return analyzePcapWindows(tsharkPath,pcapPath,packageId);
         } else {
-            return analyzePcapLinux(pcapPath);
+            return analyzePcapLinux(pcapPath,packageId);
         }
     }
 
@@ -26,7 +27,7 @@ public class PcapUtil {
      * @return
      * @throws Exception
      */
-    public static List<NetFlow> analyzePcapWindows(String tsharkPath,String pcapPath) throws Exception {
+    public static List<NetFlow> analyzePcapWindows(String tsharkPath,String pcapPath,Long packageId) throws Exception {
         List<NetFlow> packets = new ArrayList<>();
 
         ProcessBuilder pb = new ProcessBuilder(
@@ -57,7 +58,7 @@ public class PcapUtil {
                     continue;
                 }
                 if (line.trim().isEmpty()) continue;
-                NetFlow packet = parseLine(line);
+                NetFlow packet = parseLine(line,packageId);
                 if (packet != null) {
                     packets.add(packet);
                 }
@@ -78,7 +79,7 @@ public class PcapUtil {
      * @return
      * @throws Exception
      */
-    public static List<NetFlow> analyzePcapLinux(String pcapPath) throws Exception {
+    public static List<NetFlow> analyzePcapLinux(String pcapPath,Long packageId) throws Exception {
         List<NetFlow> packets = new ArrayList<>();
 
         ProcessBuilder pb = new ProcessBuilder(
@@ -109,7 +110,7 @@ public class PcapUtil {
                     continue;
                 }
                 if (line.trim().isEmpty()) continue;
-                NetFlow packet = parseLine(line);
+                NetFlow packet = parseLine(line,packageId);
                 if (packet != null) {
                     packets.add(packet);
                 }
@@ -124,11 +125,13 @@ public class PcapUtil {
         return packets;
     }
 
-    private static  NetFlow parseLine(String line) {
+    private static  NetFlow parseLine(String line,Long packageId) throws Exception {
         String[] fields = line.split("\t", -1);
         if (fields.length < 9) return null; // 原8个 + 时间 = 9
 
         NetFlow packet = new NetFlow();
+        packet.setId(IdUtil.getSnowflakeNextId());
+        packet.setPackageId(packageId);
 
         String timeEpoch = safeGet(fields, 0);
         if (timeEpoch != null) {
