@@ -9,25 +9,27 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("monitor_dns")
-public class NetDns extends BaseEntity {
+@Document(collection = "monitor_dns")
+public class NetDns{
     /**
      * 主键ID
      */
     @JsonSerialize(using = ToStringSerializer.class)
-    @TableId
+    @Field("id")
     private Long id;
 
-    @TableField("ip")
+    @Field("ip")
     private String ip;
 
-    @TableField("url")
+    @Field("url")
     private String url;
 
-    @TableField("name")
+    @Field("name")
     private String name;
 }

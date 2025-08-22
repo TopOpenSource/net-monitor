@@ -4,5 +4,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.net.domain.NetFlow;
 import com.ruoyi.net.domain.NetIpLocation;
 
-public interface INetIpLocationService extends IService<NetIpLocation> {
+public interface INetIpLocationService  {
 }

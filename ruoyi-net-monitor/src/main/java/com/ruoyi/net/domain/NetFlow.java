@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "monitor_flow")
-public class NetFlow extends BaseEntity{
+public class NetFlow{
     /**
      * 主键ID
      */
