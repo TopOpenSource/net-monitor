@@ -5,6 +5,10 @@ ruoyi:
     # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
     profile: D:/poor/uploadPath
     tshark: D:/develop/WiresharkPortable64/App/Wireshark/tshark.exe
+    # czdb 文件路径
+    czdb: D://czdb//cz88_public_v4.czdb
+    # czdb key
+    czdbKey: Oma6VnnftYo+1vjaMjMtbw==
 # 数据源配置
 spring:
     data:

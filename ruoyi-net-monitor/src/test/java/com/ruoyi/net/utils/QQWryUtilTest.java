@@ -8,8 +8,9 @@ import java.io.IOException;
 
 public class QQWryUtilTest {
     public static void main(String[] args) throws Exception {
-        DbSearcher searcher = new DbSearcher("D://qqwry.dat", QueryType.MEMORY, "0577f27d-3164-3d84-b31a-9f7bfa7d86ef");
-
+        DbSearcher searcher = new DbSearcher("D://czdb//cz88_public_v4.czdb", QueryType.MEMORY, "Oma6VnnftYo+1vjaMjMtbw==");
+        String search = searcher.search("13.35.37.84");
+        System.out.println(search);
         searcher.close();
     }
 
